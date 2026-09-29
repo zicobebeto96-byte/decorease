@@ -23,6 +23,8 @@
                             300: '#D9B2A3', 400: '#C58C77', 500: '#B26C52',
                             600: '#9E523A', 700: '#7E3E2B',
                         },
+                        amberGold: { 400: '#D4AF37', 50: '#C5A028' },
+                        darkSlate: '#1E293B',
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
@@ -35,11 +37,15 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
         .font-serif-title { font-family: 'Playfair Display', serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col md:flex-row">
 
-    <!-- Sidebar -->
+    <!-- Sidebar Navigation -->
     <aside class="w-full md:w-64 bg-white border-r border-slate-200 shrink-0 flex flex-col justify-between z-20 shadow-sm">
         <div>
             <div class="p-6 border-b border-slate-100 flex items-center justify-between">
@@ -84,10 +90,13 @@
                     <p class="text-[10px] text-slate-500">Lead Decorator</p>
                 </div>
             </div>
+            <button class="text-slate-400 hover:text-slate-600 text-sm">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </button>
         </div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- Main Content Area -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
         <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
             <div>
@@ -95,103 +104,199 @@
                 <h2 id="page-title" class="text-2xl font-bold text-slate-900 font-serif-title">Dashboard Overview</h2>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="openBookingModal()" class="flex items-center justify-center space-x-2 bg-roseGold-500 hover:bg-roseGold-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium shadow-md shadow-roseGold-200 transition-all">
+                <button onclick="openBookingModal()" class="flex items-center justify-center space-x-2 bg-roseGold-500 hover:bg-roseGold-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium shadow-md shadow-roseGold-200 transition-all shrink-0">
                     <i class="fa-solid fa-plus text-xs"></i>
                     <span>New Booking</span>
                 </button>
             </div>
         </header>
 
-        <!-- Toast Notification -->
+        <!-- Toast Notification Area -->
         <div id="toast-notification" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 text-xs z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
             <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
             <span id="toast-message">Action successful!</span>
         </div>
 
-        <!-- TAB 1: DASHBOARD -->
+        <!-- TAB 1: DASHBOARD OVERVIEW VIEW -->
         <div id="tab-dashboard" class="tab-content space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                    <p class="text-xs font-semibold uppercase text-slate-400">Total Bookings</p>
-                    <h3 id="stat-total-bookings" class="text-2xl font-bold text-slate-800 mt-1">0 Events</h3>
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Total Bookings</p>
+                            <h3 id="dash-total-bookings" class="text-2xl font-bold text-slate-800 mt-1">0 Events</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-emerald-600 mt-3 font-medium flex items-center">
+                        <i class="fa-solid fa-arrow-up text-xs mr-1"></i> +12% from last month
+                    </p>
                 </div>
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                    <p class="text-xs font-semibold uppercase text-slate-400">Confirmed Events</p>
-                    <h3 id="stat-confirmed-events" class="text-2xl font-bold text-roseGold-600 mt-1">0 Events</h3>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Confirmed Events</p>
+                            <h3 id="dash-confirmed-events" class="text-2xl font-bold text-roseGold-600 mt-1">0 Weddings</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-roseGold-50 text-roseGold-500 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-3 font-medium">Ready for deployment</p>
                 </div>
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                    <p class="text-xs font-semibold uppercase text-slate-400">Total Revenue</p>
-                    <h3 id="stat-total-revenue" class="text-xl font-bold text-emerald-700 mt-1">Rp 0</h3>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Active Packages</p>
+                            <h3 id="dash-popular-pkg" class="text-lg font-bold text-slate-800 mt-1">0 Catalog</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-crown"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-3 font-medium">Available for clients</p>
                 </div>
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-                    <p class="text-xs font-semibold uppercase text-slate-400">Total Deposit Received</p>
-                    <h3 id="stat-total-dp" class="text-xl font-bold text-emerald-600 mt-1">Rp 0</h3>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Active Revenue</p>
+                            <h3 id="dash-total-revenue" class="text-xl font-bold text-emerald-700 mt-1">Rp 0</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                    </div>
+                    <p id="dash-total-dp" class="text-xs text-emerald-600 mt-3 font-medium">Deposit Paid: Rp 0</p>
                 </div>
             </div>
 
             <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
-                <h3 class="font-bold text-slate-800 text-lg mb-4">Upcoming Event Schedule</h3>
-                <div id="dashboard-upcoming-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Dynamic Upcoming Schedule -->
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">Upcoming Event Schedule</h3>
+                        <p class="text-xs text-slate-500">Scheduled event dates and locations</p>
+                    </div>
                 </div>
+                <div id="dashboard-upcoming-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
             </div>
         </div>
 
-        <!-- TAB 2: BOOKINGS -->
+        <!-- TAB 2: BOOKINGS & CUSTOMER MANAGEMENT -->
         <div id="tab-bookings" class="tab-content hidden space-y-6">
-            <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-100 text-xs">
+            <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm text-xs">
                 <div class="flex flex-wrap items-center gap-3 flex-1">
                     <div class="relative w-full sm:w-64">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="order-search" oninput="filterBookingsTable()" placeholder="Search customer, code, or venue..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="order-search" oninput="filterBookingsTable()" placeholder="Search customer name, code, or venue..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                     </div>
-                    <select id="filter-status" onchange="filterBookingsTable()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-700">
-                        <option value="">All Statuses</option>
-                        <option value="Draft">Draft</option>
-                        <option value="Deposit Paid">Deposit Paid</option>
-                        <option value="Confirmed">Confirmed</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Cancelled">Cancelled</option>
-                    </select>
+                    <div class="flex items-center space-x-1.5">
+                        <label class="font-bold text-slate-700 shrink-0">Status:</label>
+                        <select id="filter-status" onchange="filterBookingsTable()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400 cursor-pointer">
+                            <option value="">All Statuses</option>
+                            <option value="Draft">Draft</option>
+                            <option value="Deposit Paid">Deposit Paid</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <label class="font-bold text-slate-700 shrink-0">Start Date:</label>
+                        <input type="date" id="filter-begin-date" onchange="filterBookingsTable()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <label class="font-bold text-slate-700 shrink-0">End Date:</label>
+                        <input type="date" id="filter-end-date" onchange="filterBookingsTable()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 shrink-0">
+                    <button onclick="resetBookingFilters()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-semibold transition-colors flex items-center space-x-1">
+                        <i class="fa-solid fa-rotate-left text-[10px]"></i>
+                        <span>Reset Filters</span>
+                    </button>
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-sm">
+                    <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase">
+                            <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                                 <th class="p-4">Code & Customer</th>
                                 <th class="p-4">Wedding Date</th>
-                                <th class="p-4">Venue</th>
-                                <th class="p-4">Package</th>
-                                <th class="p-4 text-center">Status</th>
+                                <th class="p-4">Venue / Location</th>
+                                <th class="p-4">Decor Package</th>
+                                <th class="p-4 text-center">Order Status</th>
                                 <th class="p-4 text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="bookings-tbody" class="divide-y divide-slate-100"></tbody>
+                        <tbody id="bookings-tbody" class="divide-y divide-slate-100 text-sm"></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 3: PACKAGES CATALOG -->
+        <!-- TAB 3: DECOR PACKAGES CATALOG -->
         <div id="tab-packages" class="tab-content hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Standard Decor Package Catalog</h3>
+                    <p class="text-xs text-slate-500">List of decoration packages with reference Bill of Materials (BOM).</p>
+                </div>
+                <button onclick="openNewPackageModal()" class="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-2 rounded-xl text-xs font-medium transition-colors shadow-sm">
+                    <i class="fa-solid fa-plus mr-1"></i> Create New Package
+                </button>
+            </div>
             <div id="packages-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
         </div>
 
         <!-- TAB 4: COMPONENT INVENTORY -->
         <div id="tab-inventory" class="tab-content hidden space-y-6">
-            <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Component Inventory Management</h3>
+                    <p class="text-xs text-slate-500">Manage master items, physical stock, and event allocation.</p>
+                </div>
+                <button onclick="openAddComponentModal()" class="bg-roseGold-500 hover:bg-roseGold-600 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-md shadow-roseGold-200 transition-all flex items-center space-x-2">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span>Add Component Item</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="relative md:col-span-2">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="inventory-search" oninput="filterInventoryTable()" placeholder="Search item name..." class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                </div>
+                <select id="inventory-filter-category" onchange="filterInventoryTable()" class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                    <option value="">All Categories</option>
+                    <option value="Backdrop & Frame">Backdrop & Frame</option>
+                    <option value="Lighting">Lighting</option>
+                    <option value="Flowers & Flora">Flowers & Flora</option>
+                    <option value="Furniture & Seating">Furniture & Seating</option>
+                    <option value="Fabric & Drapery">Fabric & Drapery</option>
+                </select>
+                <div class="text-xs text-slate-500 flex items-center justify-end font-medium">
+                    Total Items: <span id="inventory-count" class="font-bold text-slate-800 ml-1">0 Types</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-sm">
                         <thead>
-                            <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase">
+                            <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                                 <th class="p-4">Component Name</th>
                                 <th class="p-4">Category</th>
-                                <th class="p-4 text-center">Total Stock</th>
-                                <th class="p-4 text-center">Allocated</th>
-                                <th class="p-4 text-center">Available</th>
+                                <th class="p-4 text-center">Total Physical Stock</th>
+                                <th class="p-4 text-center">Allocated (Booked)</th>
+                                <th class="p-4 text-center">Available Stock</th>
+                                <th class="p-4 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody id="inventory-tbody" class="divide-y divide-slate-100"></tbody>
@@ -201,45 +306,326 @@
         </div>
     </main>
 
-    <!-- MODAL BOOKING -->
+    <!-- MODAL: VIEW ORDER DETAILS (READ ONLY) -->
+    <div id="modal-detail" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
+                <div>
+                    <span class="text-xs font-bold text-roseGold-500 uppercase tracking-wider">Booking & BOM Component Details (View Only)</span>
+                    <h3 id="modal-client-name" class="text-xl font-bold font-serif-title text-slate-900">-</h3>
+                </div>
+                <button onclick="closeModal('modal-detail')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-6">
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4 bg-slate-50 rounded-xl text-xs">
+                    <div><span class="text-slate-400 block">Booking Code:</span><span id="modal-code" class="font-bold text-slate-800">-</span></div>
+                    <div><span class="text-slate-400 block">Event Date:</span><span id="modal-date" class="font-bold text-slate-800">-</span></div>
+                    <div><span class="text-slate-400 block">Order Status:</span><span id="modal-status-badge" class="inline-block px-2.5 py-0.5 rounded-full font-bold text-[10px] mt-0.5">-</span></div>
+                    <div><span class="text-slate-400 block">Selected Package:</span><span id="modal-package" class="font-bold text-slate-800">-</span></div>
+                    <div class="col-span-2"><span class="text-slate-400 block">Location / Venue:</span><span id="modal-venue" class="font-medium text-slate-800">-</span></div>
+                </div>
+                <div class="grid grid-cols-3 gap-3 p-4 bg-roseGold-50/50 rounded-xl border border-roseGold-100 text-xs">
+                    <div><span class="text-slate-500 block">Package Price / Total:</span><span id="modal-price-val" class="font-bold text-slate-900 text-sm">Rp 0</span></div>
+                    <div><span class="text-slate-500 block">Deposit Paid:</span><span id="modal-dp-val" class="font-bold text-emerald-600 text-sm">Rp 0</span></div>
+                    <div><span class="text-slate-500 block">Remaining Balance:</span><span id="modal-total-tagihan-val" class="font-bold text-roseGold-600 text-sm">Rp 0</span></div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm mb-3">Main Decor Components</h4>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden text-xs">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-100 text-slate-600 font-bold border-b border-slate-200">
+                                <tr><th class="p-3">Component Name</th><th class="p-3 text-center">Qty</th><th class="p-3 text-center">Unit</th></tr>
+                            </thead>
+                            <tbody id="modal-components-tbody" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm mb-3">Additionals (Consumable)</h4>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden text-xs">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-100 text-slate-600 font-bold border-b border-slate-200">
+                                <tr><th class="p-3">Component Name</th><th class="p-3 text-center">Qty</th><th class="p-3 text-center">Unit</th></tr>
+                            </thead>
+                            <tbody id="modal-additional-tbody" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs flex justify-between items-center">
+                    <span class="font-bold text-slate-700"><i class="fa-solid fa-truck text-roseGold-500 mr-2"></i>Delivery Fleet / Transport:</span>
+                    <span id="modal-transport-val" class="font-bold text-slate-900 text-xs">Not Specified</span>
+                </div>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+                <button onclick="closeModal('modal-detail')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl text-xs">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT BOOKING FORM -->
     <div id="modal-booking" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-4 text-xs">
-            <h3 id="booking-modal-title" class="text-xl font-bold font-serif-title text-slate-900">New Booking Form</h3>
-            <form onsubmit="handleBookingSubmit(event)" class="space-y-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
+                <div>
+                    <h3 id="booking-modal-title" class="text-xl font-bold font-serif-title text-slate-900">New Booking Form</h3>
+                    <p class="text-xs text-slate-500">Record client decor order data</p>
+                </div>
+                <button onclick="closeModal('modal-booking')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="handleBookingSubmit(event)" class="p-6 space-y-4 text-xs">
                 <input type="hidden" id="edit-booking-id">
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="text" id="new-book-client" placeholder="Client Name *" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full">
-                    <input type="tel" id="new-book-phone" placeholder="WhatsApp Phone *" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Couple / Client Name *</label>
+                        <input type="text" id="new-book-client" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">WhatsApp Phone Number *</label>
+                        <input type="tel" id="new-book-phone" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                    </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="date" id="new-book-date" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full">
-                    <select id="new-book-package" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full"></select>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Wedding Date *</label>
+                        <input type="date" id="new-book-date" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Select Base Decor Package *</label>
+                        <select id="new-book-package" onchange="onBookingPackageChange()" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400"></select>
+                    </div>
                 </div>
-                <input type="text" id="new-book-venue" placeholder="Venue Location *" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full">
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="number" id="new-book-price" placeholder="Price (Rp) *" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full font-bold">
-                    <input type="number" id="new-book-dp" placeholder="Deposit DP (Rp)" class="px-3 py-2 bg-slate-50 border rounded-xl w-full font-bold text-emerald-600">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Venue Name & Location *</label>
+                    <input type="text" id="new-book-venue" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                 </div>
-                <select id="new-book-status" class="px-3 py-2 bg-slate-50 border rounded-xl w-full font-semibold">
-                    <option value="Draft">Draft</option>
-                    <option value="Deposit Paid">Deposit Paid</option>
-                    <option value="Confirmed">Confirmed</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                </select>
-                <div class="flex justify-end space-x-2 pt-4">
-                    <button type="button" onclick="closeModal('modal-booking')" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-roseGold-500 text-white rounded-xl shadow">Save to Supabase</button>
+                <div class="p-3 bg-slate-50 rounded-xl border space-y-3">
+                    <span class="block font-bold text-xs text-roseGold-600"><i class="fa-solid fa-calculator mr-1"></i> Payment Information</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Price (Rp) *</label>
+                            <input type="number" id="new-book-price" oninput="calculateTotalTagihan()" required class="w-full px-3 py-2 bg-white border rounded-xl font-bold">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Deposit (Rp)</label>
+                            <input type="number" id="new-book-dp" oninput="calculateTotalTagihan()" class="w-full px-3 py-2 bg-white border rounded-xl font-bold text-emerald-600">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Total Remaining (Rp)</label>
+                            <input type="number" id="new-book-total-tagihan" readonly disabled class="w-full px-3 py-2 bg-slate-200 border rounded-xl font-bold text-roseGold-700 cursor-not-allowed">
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-2 border-t">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block font-bold text-slate-700">Main Decor Components (Custom)</label>
+                        <button type="button" onclick="addBookingCustomComponentRow()" class="px-3 py-1 bg-roseGold-50 text-roseGold-600 rounded-lg font-bold text-xs"><i class="fa-solid fa-plus text-[10px] mr-1"></i> Add Component</button>
+                    </div>
+                    <div id="booking-components-container" class="space-y-2"></div>
+                </div>
+                <div class="pt-2 border-t">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block font-bold text-slate-700">Additionals (Consumable Items)</label>
+                        <button type="button" onclick="addAdditionalRowInput()" class="px-3 py-1 bg-roseGold-50 text-roseGold-600 rounded-lg font-bold text-xs"><i class="fa-solid fa-plus text-[10px] mr-1"></i> Add Item</button>
+                    </div>
+                    <div id="additional-rows-container" class="space-y-2"></div>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Transport / Delivery Fleet</label>
+                    <input type="text" id="new-book-transport" class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                </div>
+                <div id="booking-status-field-container">
+                    <label class="block font-bold text-slate-700 mb-1">Order Status *</label>
+                    <select id="new-book-status" class="w-full px-3 py-2 bg-slate-50 border rounded-xl font-semibold">
+                        <option value="Draft">Draft</option>
+                        <option value="Deposit Paid">Deposit Paid</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="pt-4 border-t flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('modal-booking')" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-roseGold-500 text-white font-semibold rounded-xl shadow-md">Save Order</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Application Script -->
+    <!-- MODAL: CONFIRM DELETE BOOKING -->
+    <div id="modal-delete-booking-confirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border">
+            <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div>
+                <h4 class="font-bold text-slate-900 text-base">Delete This Order?</h4>
+                <p class="text-xs text-slate-500 mt-1">Order for "<span id="delete-booking-client" class="font-bold text-slate-800"></span>" will be removed.</p>
+            </div>
+            <div class="flex justify-center space-x-2 pt-2">
+                <button onclick="closeModal('modal-delete-booking-confirm')" class="px-4 py-2 bg-slate-100 text-slate-700 font-semibold rounded-xl text-xs">Cancel</button>
+                <button id="btn-confirm-delete-booking" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-xl text-xs shadow-md">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CREATE NEW PACKAGE -->
+    <div id="modal-package-form" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border">
+            <div class="p-6 border-b flex items-center justify-between sticky top-0 bg-white z-10">
+                <div>
+                    <h3 class="text-xl font-bold font-serif-title text-slate-900">Create New Decor Package</h3>
+                </div>
+                <button onclick="closeModal('modal-package-form')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handlePackageSubmit(event)" class="p-6 space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Package Name *</label>
+                    <input type="text" id="pkg-name" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Estimated Package Price (Rp) *</label>
+                    <input type="number" id="pkg-price" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Description</label>
+                    <textarea id="pkg-desc" rows="2" class="w-full px-3 py-2 bg-slate-50 border rounded-xl"></textarea>
+                </div>
+                <div class="pt-2">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block font-bold text-slate-700">Main Package Components (BOM)</label>
+                        <button type="button" onclick="addBomRowInput('bom-rows-container')" class="text-xs font-bold text-roseGold-600"><i class="fa-solid fa-plus text-[10px]"></i> Add Row</button>
+                    </div>
+                    <div id="bom-rows-container" class="space-y-3"></div>
+                </div>
+                <div class="pt-4 border-t flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('modal-package-form')" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-roseGold-500 text-white font-semibold rounded-xl shadow-md">Save Package</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: EDIT / VIEW DECOR PACKAGE -->
+    <div id="modal-edit-package-bom" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border">
+            <div class="p-6 border-b flex items-center justify-between sticky top-0 bg-white z-10">
+                <div>
+                    <span id="edit-bom-badge" class="text-xs font-bold text-roseGold-500 uppercase">Package Details</span>
+                    <h3 id="edit-bom-title" class="text-xl font-bold font-serif-title text-slate-900">Decor Package Details</h3>
+                </div>
+                <button onclick="closeModal('modal-edit-package-bom')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="pkg-modal-form" onsubmit="handleSavePackageFull(event)" class="p-6 space-y-4 text-xs">
+                <input type="hidden" id="edit-pkg-id">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Package Name *</label>
+                    <input type="text" id="edit-pkg-name" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Estimated Price (Rp) *</label>
+                    <input type="number" id="edit-pkg-price" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Description</label>
+                    <textarea id="edit-pkg-desc" rows="2" class="w-full px-3 py-2 bg-slate-50 border rounded-xl"></textarea>
+                </div>
+                <div class="pt-2">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block font-bold text-slate-700">Main Components (BOM)</label>
+                        <button type="button" id="btn-add-edit-bom-row" onclick="addBomRowInput('edit-bom-container')" class="px-3 py-1 bg-roseGold-50 text-roseGold-600 rounded-lg font-bold text-xs"><i class="fa-solid fa-plus mr-1"></i> Add Component</button>
+                    </div>
+                    <div id="edit-bom-container" class="space-y-3"></div>
+                </div>
+                <div class="pt-4 border-t flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('modal-edit-package-bom')" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold rounded-xl">Close</button>
+                    <button type="submit" id="btn-save-pkg-modal" class="px-4 py-2 bg-roseGold-500 text-white font-semibold rounded-xl shadow-md">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT COMPONENT INVENTORY -->
+    <div id="modal-component-form" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border">
+            <div class="p-6 border-b flex items-center justify-between sticky top-0 bg-white z-10">
+                <div>
+                    <h3 id="component-modal-title" class="text-xl font-bold font-serif-title text-slate-900">Add Component Item</h3>
+                </div>
+                <button onclick="closeModal('modal-component-form')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleComponentSubmit(event)" class="p-6 space-y-4 text-xs">
+                <input type="hidden" id="comp-form-id">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Component Name *</label>
+                    <input type="text" id="comp-form-name" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Category *</label>
+                    <select id="comp-form-category" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                        <option value="">-- Select Category --</option>
+                        <option value="Backdrop & Frame">Backdrop & Frame</option>
+                        <option value="Lighting">Lighting</option>
+                        <option value="Flowers & Flora">Flowers & Flora</option>
+                        <option value="Furniture & Seating">Furniture & Seating</option>
+                        <option value="Fabric & Drapery">Fabric & Drapery</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Total Stock *</label>
+                        <input type="number" id="comp-form-total" required min="1" class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Unit *</label>
+                        <input type="text" id="comp-form-unit" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Notes / Condition Details</label>
+                    <textarea id="comp-form-notes" rows="3" class="w-full px-3 py-2 bg-slate-50 border rounded-xl"></textarea>
+                </div>
+                <div class="pt-4 border-t flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('modal-component-form')" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-roseGold-500 text-white font-semibold rounded-xl shadow-md">Save Component</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: CONFIRM DELETE ITEM -->
+    <div id="modal-delete-confirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border">
+            <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div>
+                <h4 class="font-bold text-slate-900 text-base">Delete This Component?</h4>
+                <p class="text-xs text-slate-500 mt-1">Item "<span id="delete-item-name" class="font-bold text-slate-800"></span>" will be removed.</p>
+            </div>
+            <div class="flex justify-center space-x-2 pt-2">
+                <button onclick="closeModal('modal-delete-confirm')" class="px-4 py-2 bg-slate-100 text-slate-700 font-semibold rounded-xl text-xs">Cancel</button>
+                <button id="btn-confirm-delete" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-xl text-xs shadow-md">Yes, Delete Item</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CONFIRM DELETE PACKAGE -->
+    <div id="modal-delete-pkg-confirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border">
+            <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div>
+                <h4 class="font-bold text-slate-900 text-base">Delete This Package?</h4>
+                <p class="text-xs text-slate-500 mt-1">Package "<span id="delete-pkg-name" class="font-bold text-slate-800"></span>" will be removed.</p>
+            </div>
+            <div class="flex justify-center space-x-2 pt-2">
+                <button onclick="closeModal('modal-delete-pkg-confirm')" class="px-4 py-2 bg-slate-100 text-slate-700 font-semibold rounded-xl text-xs">Cancel</button>
+                <button id="btn-confirm-delete-pkg" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-xl text-xs shadow-md">Yes, Delete Package</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS INTEGRATED WITH SUPABASE -->
     <script>
-        // -------------------------------------------------------------
-        // KONFIGURASI SUPABASE (ISI DENGAN DATA SUPABASE KAMU)
-        // -------------------------------------------------------------
         const SUPABASE_URL = 'https://cgbjbgwnpehemcbgaunc.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNnYmpiZ3ducGVoZW1jYmdhdW5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NjA0MjIsImV4cCI6MjEwNjIzNjQyMn0.CliRqByMQ9wf-xrzeQgwZ-IiYVNbN9Byu8HtUZumxFU';
         
@@ -249,173 +635,679 @@
         let packagesData = [];
         let inventoryData = [];
 
-        window.onload = async function() {
-            await fetchAllData();
+        let itemToDeleteId = null;
+        let pkgToDeleteId = null;
+        let bookingToDeleteId = null;
+
+        const statusStyles = {
+            'Draft': { bg: 'bg-slate-100', text: 'text-slate-700' },
+            'Deposit Paid': { bg: 'bg-amber-100', text: 'text-amber-700' },
+            'Confirmed': { bg: 'bg-emerald-100', text: 'text-emerald-700' },
+            'Completed': { bg: 'bg-purple-100', text: 'text-purple-700' },
+            'Cancelled': { bg: 'bg-red-100', text: 'text-red-700' }
         };
 
-        async function fetchAllData() {
-            showToast('Fetching latest data...');
-            
-            // 1. Fetch Bookings
-            const { data: bData } = await db.from('bookings').select('*').order('created_at', { ascending: false });
-            if (bData) bookingsData = bData;
+        window.onload = async function() {
+            await fetchAllDataFromSupabase();
+        };
 
-            // 2. Fetch Packages
-            const { data: pData } = await db.from('packages').select('*');
-            if (pData) packagesData = pData;
+        async function fetchAllDataFromSupabase() {
+            showToast('Loading data from Supabase Cloud...');
+            try {
+                // 1. Fetch Bookings
+                const { data: bData, error: bErr } = await db.from('bookings').select('*').order('created_at', { ascending: false });
+                if (bErr) console.error(bErr);
+                if (bData) {
+                    bookingsData = bData.map(b => ({
+                        id: b.id,
+                        client: b.client,
+                        phone: b.phone,
+                        date: b.date,
+                        formattedDate: b.formatted_date || b.date,
+                        venue: b.venue,
+                        package: b.package,
+                        price: Number(b.price) || 0,
+                        dp: Number(b.dp) || 0,
+                        totalTagihan: Number(b.total_tagihan) || 0,
+                        status: b.status || 'Draft',
+                        transport: b.transport || '',
+                        customComponents: b.custom_components || [],
+                        additional: b.additional || []
+                    }));
+                }
 
-            // 3. Fetch Inventory
-            const { data: iData } = await db.from('inventory').select('*');
-            if (iData) inventoryData = iData;
+                // 2. Fetch Packages
+                const { data: pData, error: pErr } = await db.from('packages').select('*');
+                if (pErr) console.error(pErr);
+                if (pData) {
+                    packagesData = pData.map(p => ({
+                        id: p.id,
+                        name: p.name,
+                        price: Number(p.price) || 0,
+                        description: p.description,
+                        components: p.components || []
+                    }));
+                }
 
-            renderAllViews();
+                // 3. Fetch Inventory
+                const { data: iData, error: iErr } = await db.from('inventory').select('*').order('name', { ascending: true });
+                if (iErr) console.error(iErr);
+                if (iData) {
+                    inventoryData = iData.map(i => ({
+                        id: i.id,
+                        name: i.name,
+                        category: i.category,
+                        totalStock: Number(i.total_stock) || 0,
+                        allocatedStock: Number(i.allocated_stock) || 0,
+                        unit: i.unit,
+                        notes: i.notes
+                    }));
+                }
+
+                renderDashboard();
+                renderBookingsTable();
+                renderPackagesGrid();
+                renderInventoryTable();
+                populatePackageOptions();
+
+            } catch (err) {
+                console.error(err);
+                alert('Connection error to Supabase!');
+            }
         }
 
-        function renderAllViews() {
-            renderDashboard();
-            renderBookingsTable();
-            renderPackagesGrid();
-            renderInventoryTable();
-            populatePackageOptions();
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('bg-roseGold-50', 'text-roseGold-600');
+                b.classList.add('text-slate-600');
+            });
+
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            if (activeTab) activeTab.classList.remove('hidden');
+
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.add('bg-roseGold-50', 'text-roseGold-600');
+                activeNav.classList.remove('text-slate-600');
+            }
+
+            const pageTitle = document.getElementById('page-title');
+            switch (tabId) {
+                case 'dashboard': pageTitle.innerText = 'Dashboard Overview'; break;
+                case 'bookings': pageTitle.innerText = 'Customer Orders & Schedule'; renderBookingsTable(); break;
+                case 'packages': pageTitle.innerText = 'Decor Package Catalog & BOM'; renderPackagesGrid(); break;
+                case 'inventory': pageTitle.innerText = 'Warehouse Component Inventory'; renderInventoryTable(); break;
+            }
         }
 
         function renderDashboard() {
-            document.getElementById('stat-total-bookings').innerText = `${bookingsData.length} Events`;
+            document.getElementById('dash-total-bookings').innerText = `${bookingsData.length} Events`;
             const confirmed = bookingsData.filter(b => b.status === 'Confirmed').length;
-            document.getElementById('stat-confirmed-events').innerText = `${confirmed} Events`;
-            
-            const totalRev = bookingsData.reduce((acc, curr) => acc + (Number(curr.price) || 0), 0);
-            const totalDp = bookingsData.reduce((acc, curr) => acc + (Number(curr.dp) || 0), 0);
+            document.getElementById('dash-confirmed-events').innerText = `${confirmed} Weddings`;
+            document.getElementById('dash-popular-pkg').innerText = `${packagesData.length} Catalog`;
 
-            document.getElementById('stat-total-revenue').innerText = `Rp ${totalRev.toLocaleString('en-US')}`;
-            document.getElementById('stat-total-dp').innerText = `Rp ${totalDp.toLocaleString('en-US')}`;
+            const totalRev = bookingsData.reduce((acc, curr) => acc + (curr.price || 0), 0);
+            const totalDp = bookingsData.reduce((acc, curr) => acc + (curr.dp || 0), 0);
 
-            // Upcoming Schedule Cards
+            document.getElementById('dash-total-revenue').innerText = `Rp ${totalRev.toLocaleString('en-US')}`;
+            document.getElementById('dash-total-dp').innerText = `Deposit Paid: Rp ${totalDp.toLocaleString('en-US')}`;
+
             const grid = document.getElementById('dashboard-upcoming-grid');
+            if (bookingsData.length === 0) {
+                grid.innerHTML = `<div class="col-span-3 text-slate-400 text-xs py-4 text-center">No scheduled events.</div>`;
+                return;
+            }
+
             grid.innerHTML = bookingsData.slice(0, 3).map(item => `
-                <div class="p-4 rounded-xl border border-slate-100 bg-white hover:border-roseGold-200 transition">
-                    <span class="text-xs font-bold text-roseGold-600 block">${item.formatted_date || item.date}</span>
-                    <h4 class="text-sm font-bold text-slate-900 mt-1">${item.client}</h4>
-                    <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> ${item.venue}</p>
-                    <span class="inline-block mt-2 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700">${item.status}</span>
+                <div class="flex items-start space-x-4 p-4 rounded-xl border border-slate-100 hover:border-roseGold-200 bg-white hover:bg-roseGold-50/20 transition-all cursor-pointer" onclick="openDetailModal('${item.id}')">
+                    <div class="flex-none text-center bg-roseGold-100 rounded-xl p-2.5 w-16">
+                        <span class="block text-xs uppercase font-bold text-roseGold-600">Event</span>
+                        <span class="block text-sm font-bold text-roseGold-700">${item.formattedDate || item.date}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-sm font-bold text-slate-900 truncate">${item.client}</h4>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-700">${item.status}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i> ${item.venue}</p>
+                        <div class="mt-2 text-xs text-slate-600">
+                            <div><i class="fa-solid fa-wand-magic-sparkles mr-1 text-roseGold-400"></i> ${item.package}</div>
+                        </div>
+                    </div>
                 </div>
             `).join('');
         }
 
         function renderBookingsTable() {
             const tbody = document.getElementById('bookings-tbody');
+            if (!tbody) return;
+
             const searchVal = (document.getElementById('order-search')?.value || '').toLowerCase();
-            const statusVal = document.getElementById('filter-status')?.value || '';
+            const selectedStatus = document.getElementById('filter-status')?.value || '';
+            const beginDateVal = document.getElementById('filter-begin-date')?.value || '';
+            const endDateVal = document.getElementById('filter-end-date')?.value || '';
 
             const filtered = bookingsData.filter(item => {
-                const matchSearch = !searchVal || item.client.toLowerCase().includes(searchVal) || item.id.toLowerCase().includes(searchVal);
-                const matchStatus = !statusVal || item.status === statusVal;
-                return matchSearch && matchStatus;
+                const matchSearch = !searchVal || item.client.toLowerCase().includes(searchVal) || item.id.toLowerCase().includes(searchVal) || item.venue.toLowerCase().includes(searchVal);
+                const matchStatus = !selectedStatus || item.status === selectedStatus;
+                
+                let matchDate = true;
+                if (beginDateVal && endDateVal) {
+                    matchDate = (item.date >= beginDateVal && item.date <= endDateVal);
+                }
+                return matchSearch && matchStatus && matchDate;
             });
 
-            tbody.innerHTML = filtered.map(item => `
-                <tr class="hover:bg-slate-50">
-                    <td class="p-4 font-bold text-slate-900">${item.client} <span class="block text-xs font-normal text-slate-400">${item.id}</span></td>
-                    <td class="p-4 font-medium">${item.formatted_date || item.date}</td>
-                    <td class="p-4 text-xs text-slate-600">${item.venue}</td>
-                    <td class="p-4 text-xs font-bold">${item.package}</td>
-                    <td class="p-4 text-center"><span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">${item.status}</span></td>
-                    <td class="p-4 text-center">
-                        <button onclick="deleteBooking('${item.id}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg text-xs"><i class="fa-solid fa-trash-can"></i></button>
-                    </td>
-                </tr>
-            `).join('');
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 text-xs">No orders match the current filter.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(item => {
+                const style = statusStyles[item.status] || statusStyles['Draft'];
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-4">
+                            <div class="font-bold text-slate-900">${item.client}</div>
+                            <div class="text-xs text-slate-400">ID: ${item.id} • ${item.phone}</div>
+                        </td>
+                        <td class="p-4 font-medium text-slate-800">${item.formattedDate || item.date}</td>
+                        <td class="p-4 text-slate-600 text-xs">${item.venue}</td>
+                        <td class="p-4 text-xs font-semibold text-slate-800">${item.package}</td>
+                        <td class="p-4 text-center">
+                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold ${style.bg} ${style.text}">${item.status}</span>
+                        </td>
+                        <td class="p-4 text-center">
+                            <div class="flex items-center justify-center space-x-1.5">
+                                <button onclick="openDetailModal('${item.id}')" class="p-1.5 text-slate-600 hover:bg-slate-100 rounded-lg text-xs"><i class="fa-solid fa-eye"></i></button>
+                                <button onclick="openEditBookingModal('${item.id}')" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg text-xs"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="confirmDeleteBooking('${item.id}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg text-xs"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
         }
 
-        function renderPackagesGrid() {
-            const grid = document.getElementById('packages-grid');
-            grid.innerHTML = packagesData.map(pkg => `
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                    <h4 class="font-bold text-lg text-slate-900">${pkg.name}</h4>
-                    <span class="text-xs font-bold text-roseGold-600">Rp ${Number(pkg.price).toLocaleString('en-US')}</span>
-                    <p class="text-xs text-slate-500 mt-2">${pkg.description || ''}</p>
-                </div>
-            `).join('');
-        }
-
-        function renderInventoryTable() {
-            const tbody = document.getElementById('inventory-tbody');
-            tbody.innerHTML = inventoryData.map(item => `
-                <tr class="hover:bg-slate-50">
-                    <td class="p-4 font-bold text-slate-800">${item.name}</td>
-                    <td class="p-4 text-xs text-slate-600">${item.category}</td>
-                    <td class="p-4 text-center font-bold">${item.total_stock} ${item.unit}</td>
-                    <td class="p-4 text-center text-amber-600 font-bold">${item.allocated_stock} ${item.unit}</td>
-                    <td class="p-4 text-center text-emerald-600 font-bold">${item.total_stock - item.allocated_stock} ${item.unit}</td>
-                </tr>
-            `).join('');
+        function filterBookingsTable() { renderBookingsTable(); }
+        function resetBookingFilters() {
+            if (document.getElementById('order-search')) document.getElementById('order-search').value = '';
+            document.getElementById('filter-status').value = '';
+            document.getElementById('filter-begin-date').value = '';
+            document.getElementById('filter-end-date').value = '';
+            renderBookingsTable();
         }
 
         function populatePackageOptions() {
             const select = document.getElementById('new-book-package');
-            select.innerHTML = `<option value="">-- Select Package --</option>` + packagesData.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+            if (select) {
+                select.innerHTML = `<option value="">-- Select Decor Package --</option>` + packagesData.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+            }
         }
 
-        // SUPABASE REALTIME SAVE / DELETE
+        function calculateTotalTagihan() {
+            const price = parseInt(document.getElementById('new-book-price')?.value) || 0;
+            const dp = parseInt(document.getElementById('new-book-dp')?.value) || 0;
+            document.getElementById('new-book-total-tagihan').value = Math.max(0, price - dp);
+        }
+
+        function createBookingCustomComponentRowHtml(selectedName = '', qty = 1, unitVal = '') {
+            const rowId = 'book-comp-row-' + Math.random().toString(36).substr(2, 9);
+            return `
+                <div class="flex gap-2 items-center booking-comp-row-item" id="${rowId}">
+                    <input type="text" value="${selectedName}" placeholder="Component Name..." required class="book-comp-name flex-1 px-3 py-2 bg-slate-50 border rounded-xl text-xs">
+                    <input type="number" min="1" value="${qty}" required class="book-comp-qty w-20 px-3 py-2 bg-slate-50 border rounded-xl font-bold text-center text-xs">
+                    <input type="text" value="${unitVal || 'Pcs'}" class="book-comp-unit w-24 px-3 py-2 bg-slate-200 border rounded-xl text-center text-xs">
+                    <button type="button" onclick="removeBookingCustomComponentRow('${rowId}')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+            `;
+        }
+
+        function addBookingCustomComponentRow(name = '', qty = 1, unit = '') {
+            document.getElementById('booking-components-container').insertAdjacentHTML('beforeend', createBookingCustomComponentRowHtml(name, qty, unit));
+        }
+        function removeBookingCustomComponentRow(id) { const el = document.getElementById(id); if (el) el.remove(); }
+
+        function createAdditionalRowHtml(name = '', qty = 1, unit = 'Pcs') {
+            const rowId = 'add-row-' + Math.random().toString(36).substr(2, 9);
+            return `
+                <div class="flex gap-2 items-center additional-row-item" id="${rowId}">
+                    <input type="text" value="${name}" placeholder="Additional Item Name..." required class="add-comp-name flex-1 px-3 py-2 bg-slate-50 border rounded-xl text-xs">
+                    <input type="number" min="1" value="${qty}" required class="add-comp-qty w-20 px-3 py-2 bg-slate-50 border rounded-xl font-bold text-center text-xs">
+                    <input type="text" value="${unit}" required class="add-comp-unit w-28 px-3 py-2 bg-slate-50 border rounded-xl text-xs text-center">
+                    <button type="button" onclick="removeAdditionalRow('${rowId}')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+            `;
+        }
+
+        function addAdditionalRowInput(name = '', qty = 1, unit = 'Pcs') {
+            document.getElementById('additional-rows-container').insertAdjacentHTML('beforeend', createAdditionalRowHtml(name, qty, unit));
+        }
+        function removeAdditionalRow(id) { const el = document.getElementById(id); if (el) el.remove(); }
+
+        function onBookingPackageChange() {
+            const selectedName = document.getElementById('new-book-package').value;
+            const container = document.getElementById('booking-components-container');
+            if (!selectedName) return;
+
+            const matched = packagesData.find(p => p.name === selectedName);
+            if (!matched) return;
+
+            const priceInput = document.getElementById('new-book-price');
+            if (priceInput && (!priceInput.value || priceInput.value == 0)) {
+                priceInput.value = matched.price;
+                calculateTotalTagihan();
+            }
+
+            container.innerHTML = (matched.components || []).map(c => createBookingCustomComponentRowHtml(c.name, c.qty, c.unit)).join('');
+        }
+
+        function openBookingModal() {
+            populatePackageOptions();
+            document.getElementById('booking-modal-title').innerText = 'New Booking Form';
+            document.getElementById('edit-booking-id').value = '';
+            document.getElementById('new-book-client').value = '';
+            document.getElementById('new-book-phone').value = '';
+            document.getElementById('new-book-date').value = '';
+            document.getElementById('new-book-package').value = '';
+            document.getElementById('new-book-venue').value = '';
+            document.getElementById('new-book-price').value = '';
+            document.getElementById('new-book-dp').value = '';
+            document.getElementById('new-book-total-tagihan').value = '0';
+            document.getElementById('new-book-transport').value = '';
+            document.getElementById('booking-components-container').innerHTML = '';
+            document.getElementById('additional-rows-container').innerHTML = '';
+            document.getElementById('booking-status-field-container').classList.add('hidden');
+            document.getElementById('modal-booking').classList.remove('hidden');
+        }
+
+        function openEditBookingModal(id) {
+            populatePackageOptions();
+            const item = bookingsData.find(b => b.id === id);
+            if (!item) return;
+
+            document.getElementById('booking-modal-title').innerText = `Edit Order ${item.id}`;
+            document.getElementById('edit-booking-id').value = item.id;
+            document.getElementById('new-book-client').value = item.client;
+            document.getElementById('new-book-phone').value = item.phone;
+            document.getElementById('new-book-date').value = item.date;
+            document.getElementById('new-book-package').value = item.package;
+            document.getElementById('new-book-venue').value = item.venue;
+            document.getElementById('new-book-price').value = item.price || 0;
+            document.getElementById('new-book-dp').value = item.dp || 0;
+            document.getElementById('new-book-transport').value = item.transport || '';
+            calculateTotalTagihan();
+
+            document.getElementById('new-book-status').value = item.status;
+            document.getElementById('booking-status-field-container').classList.remove('hidden');
+
+            const compContainer = document.getElementById('booking-components-container');
+            compContainer.innerHTML = (item.customComponents || []).map(c => createBookingCustomComponentRowHtml(c.name, c.qty, c.unit)).join('');
+
+            const addContainer = document.getElementById('additional-rows-container');
+            addContainer.innerHTML = (item.additional || []).map(a => createAdditionalRowHtml(a.name, a.qty, a.unit)).join('');
+
+            document.getElementById('modal-booking').classList.remove('hidden');
+        }
+
         async function handleBookingSubmit(e) {
             e.preventDefault();
+            const editId = document.getElementById('edit-booking-id').value;
             const client = document.getElementById('new-book-client').value;
             const phone = document.getElementById('new-book-phone').value;
             const dateStr = document.getElementById('new-book-date').value;
             const pkg = document.getElementById('new-book-package').value;
             const venue = document.getElementById('new-book-venue').value;
-            const price = Number(document.getElementById('new-book-price').value) || 0;
-            const dp = Number(document.getElementById('new-book-dp').value) || 0;
-            const status = document.getElementById('new-book-status').value;
+            const price = parseInt(document.getElementById('new-book-price').value) || 0;
+            const dp = parseInt(document.getElementById('new-book-dp').value) || 0;
+            const totalTagihan = Math.max(0, price - dp);
+            const transport = document.getElementById('new-book-transport').value;
+
+            const customComponents = Array.from(document.querySelectorAll('#booking-components-container .booking-comp-row-item')).map(row => ({
+                name: row.querySelector('.book-comp-name').value,
+                qty: parseInt(row.querySelector('.book-comp-qty').value) || 1,
+                unit: row.querySelector('.book-comp-unit').value || 'Pcs'
+            }));
+
+            const additional = Array.from(document.querySelectorAll('#additional-rows-container .additional-row-item')).map(row => ({
+                name: row.querySelector('.add-comp-name').value,
+                qty: parseInt(row.querySelector('.add-comp-qty').value) || 1,
+                unit: row.querySelector('.add-comp-unit').value || 'Pcs'
+            }));
 
             const dateObj = new Date(dateStr);
             const formattedDate = dateObj.toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' });
-            const newId = 'BK-00' + (bookingsData.length + 1);
 
-            const payload = {
-                id: newId, client, phone, date: dateStr, formatted_date: formattedDate,
-                venue, package: pkg, price, dp, total_tagihan: Math.max(0, price - dp), status
-            };
+            if (editId) {
+                const status = document.getElementById('new-book-status').value;
+                const { error } = await db.from('bookings').update({
+                    client, phone, date: dateStr, formatted_date: formattedDate, package: pkg, venue, price, dp, total_tagihan: totalTagihan, transport, custom_components: customComponents, additional, status
+                }).eq('id', editId);
 
-            const { error } = await db.from('bookings').insert([payload]);
-            if (!error) {
-                showToast('Booking saved to Supabase Cloud!');
-                closeModal('modal-booking');
-                await fetchAllData();
-            } else {
-                alert('Error saving: ' + error.message);
-            }
-        }
-
-        async function deleteBooking(id) {
-            if (confirm(`Are you sure you want to delete order ${id}?`)) {
-                const { error } = await db.from('bookings').delete().eq('id', id);
                 if (!error) {
-                    showToast('Order deleted!');
-                    await fetchAllData();
-                }
+                    showToast(`Order ${editId} updated!`);
+                    closeModal('modal-booking');
+                    await fetchAllDataFromSupabase();
+                } else { alert(error.message); }
+            } else {
+                const newId = 'BK-00' + (bookingsData.length + 1);
+                const { error } = await db.from('bookings').insert([{
+                    id: newId, client, phone, date: dateStr, formatted_date: formattedDate, venue, package: pkg, price, dp, total_tagihan: totalTagihan, transport, custom_components: customComponents, additional, status: 'Draft'
+                }]);
+
+                if (!error) {
+                    showToast('New booking added to Supabase!');
+                    closeModal('modal-booking');
+                    await fetchAllDataFromSupabase();
+                } else { alert(error.message); }
             }
         }
 
-        function openBookingModal() {
-            document.getElementById('modal-booking').classList.remove('hidden');
+        function confirmDeleteBooking(id) {
+            bookingToDeleteId = id;
+            document.getElementById('delete-booking-client').innerText = id;
+            document.getElementById('btn-confirm-delete-booking').onclick = executeDeleteBooking;
+            document.getElementById('modal-delete-booking-confirm').classList.remove('hidden');
         }
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
+
+        async function executeDeleteBooking() {
+            if (!bookingToDeleteId) return;
+            const { error } = await db.from('bookings').delete().eq('id', bookingToDeleteId);
+            if (!error) {
+                showToast('Order deleted!');
+                closeModal('modal-delete-booking-confirm');
+                await fetchAllDataFromSupabase();
+            }
         }
-        function filterBookingsTable() {
-            renderBookingsTable();
+
+        function openDetailModal(id) {
+            const item = bookingsData.find(b => b.id === id);
+            if (!item) return;
+
+            document.getElementById('modal-client-name').innerText = item.client;
+            document.getElementById('modal-code').innerText = item.id;
+            document.getElementById('modal-date').innerText = item.formattedDate || item.date;
+            document.getElementById('modal-package').innerText = item.package;
+            document.getElementById('modal-venue').innerText = item.venue;
+
+            document.getElementById('modal-price-val').innerText = `Rp ${item.price.toLocaleString('en-US')}`;
+            document.getElementById('modal-dp-val').innerText = `Rp ${item.dp.toLocaleString('en-US')}`;
+            document.getElementById('modal-total-tagihan-val').innerText = `Rp ${item.totalTagihan.toLocaleString('en-US')}`;
+            document.getElementById('modal-transport-val').innerText = item.transport || 'Not Specified';
+
+            const badge = document.getElementById('modal-status-badge');
+            const style = statusStyles[item.status] || statusStyles['Draft'];
+            badge.innerText = item.status;
+            badge.className = `inline-block px-2.5 py-0.5 rounded-full font-bold text-[10px] mt-0.5 ${style.bg} ${style.text}`;
+
+            const tbody = document.getElementById('modal-components-tbody');
+            if (item.customComponents && item.customComponents.length > 0) {
+                tbody.innerHTML = item.customComponents.map(c => `
+                    <tr><td class="p-3 font-medium text-slate-800">${c.name}</td><td class="p-3 text-center font-bold">${c.qty}</td><td class="p-3 text-center text-slate-600">${c.unit}</td></tr>
+                `).join('');
+            } else {
+                tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400">No components recorded.</td></tr>`;
+            }
+
+            const addTbody = document.getElementById('modal-additional-tbody');
+            if (item.additional && item.additional.length > 0) {
+                addTbody.innerHTML = item.additional.map(a => `
+                    <tr><td class="p-3 font-medium text-slate-800">${a.name}</td><td class="p-3 text-center font-bold">${a.qty}</td><td class="p-3 text-center text-slate-600">${a.unit}</td></tr>
+                `).join('');
+            } else {
+                addTbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400">No additional items.</td></tr>`;
+            }
+
+            document.getElementById('modal-detail').classList.remove('hidden');
         }
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            document.getElementById('page-title').innerText = tabId.toUpperCase();
+
+        function renderPackagesGrid() {
+            const grid = document.getElementById('packages-grid');
+            if (packagesData.length === 0) {
+                grid.innerHTML = `<div class="col-span-3 p-8 text-center text-slate-400">No decor packages available.</div>`;
+                return;
+            }
+
+            grid.innerHTML = packagesData.map(pkg => `
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div>
+                        <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-3">
+                            <h4 class="font-serif-title font-bold text-lg text-slate-900">${pkg.name}</h4>
+                            <span class="bg-roseGold-50 text-roseGold-700 font-bold text-xs px-3 py-1 rounded-full shrink-0 ml-2">Rp ${pkg.price.toLocaleString('en-US')}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-4">${pkg.description || ''}</p>
+                        <ul class="text-xs text-slate-600 space-y-1 bg-slate-50 p-3 rounded-xl">
+                            ${(pkg.components || []).map(c => `
+                                <li class="flex items-center justify-between"><span class="truncate"><i class="fa-solid fa-check text-roseGold-500 mr-2"></i>${c.name}</span><span class="font-bold">${c.qty}${c.unit||''}</span></li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    <div class="pt-5 flex gap-2">
+                        <button onclick="openEditPackageFullModal(${pkg.id})" class="flex-1 py-2 bg-roseGold-50 text-roseGold-600 font-semibold rounded-xl text-xs"><i class="fa-solid fa-pen-to-square mr-1"></i> Edit</button>
+                        <button onclick="confirmDeletePackage(${pkg.id})" class="py-2 px-3 bg-red-50 text-red-600 font-semibold rounded-xl text-xs"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                </div>
+            `).join('');
         }
-        function showToast(msg) {
+
+        function createBomRowHtml(selectedName = '', qty = 1, unitVal = '') {
+            const rowId = 'bom-row-' + Math.random().toString(36).substr(2, 9);
+            return `
+                <div class="flex gap-2 items-center bom-row-item" id="${rowId}">
+                    <input type="text" value="${selectedName}" placeholder="Component Name..." required class="bom-comp-name flex-1 px-3 py-2 bg-slate-50 border rounded-xl text-xs">
+                    <input type="number" min="1" value="${qty}" required class="bom-comp-qty w-20 px-3 py-2 bg-slate-50 border rounded-xl font-bold text-center text-xs">
+                    <input type="text" value="${unitVal || 'Pcs'}" class="bom-comp-unit w-20 px-3 py-2 bg-slate-200 border rounded-xl text-center text-xs">
+                    <button type="button" onclick="removeBomRow('${rowId}')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+            `;
+        }
+
+        function addBomRowInput(containerId) {
+            document.getElementById(containerId).insertAdjacentHTML('beforeend', createBomRowHtml());
+        }
+        function removeBomRow(id) { const el = document.getElementById(id); if (el) el.remove(); }
+
+        function openNewPackageModal() {
+            document.getElementById('pkg-name').value = '';
+            document.getElementById('pkg-price').value = '';
+            document.getElementById('pkg-desc').value = '';
+            document.getElementById('bom-rows-container').innerHTML = createBomRowHtml();
+            document.getElementById('modal-package-form').classList.remove('hidden');
+        }
+
+        async function handlePackageSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('pkg-name').value;
+            const price = parseInt(document.getElementById('pkg-price').value) || 0;
+            const description = document.getElementById('pkg-desc').value;
+
+            const components = Array.from(document.querySelectorAll('#bom-rows-container .bom-row-item')).map(row => ({
+                name: row.querySelector('.bom-comp-name').value,
+                qty: parseInt(row.querySelector('.bom-comp-qty').value) || 1,
+                unit: row.querySelector('.bom-comp-unit').value || 'Pcs'
+            }));
+
+            const { error } = await db.from('packages').insert([{ name, price, description, components }]);
+            if (!error) {
+                showToast(`Package "${name}" created!`);
+                closeModal('modal-package-form');
+                await fetchAllDataFromSupabase();
+            } else { alert(error.message); }
+        }
+
+        function openEditPackageFullModal(id) {
+            const pkg = packagesData.find(p => p.id === id);
+            if (!pkg) return;
+
+            document.getElementById('edit-pkg-id').value = pkg.id;
+            document.getElementById('edit-pkg-name').value = pkg.name;
+            document.getElementById('edit-pkg-price').value = pkg.price;
+            document.getElementById('edit-pkg-desc').value = pkg.description || '';
+
+            document.getElementById('edit-bom-container').innerHTML = (pkg.components || []).map(c => createBomRowHtml(c.name, c.qty, c.unit)).join('');
+            document.getElementById('modal-edit-package-bom').classList.remove('hidden');
+        }
+
+        async function handleSavePackageFull(e) {
+            e.preventDefault();
+            const pkgId = parseInt(document.getElementById('edit-pkg-id').value);
+            const name = document.getElementById('edit-pkg-name').value;
+            const price = parseInt(document.getElementById('edit-pkg-price').value) || 0;
+            const description = document.getElementById('edit-pkg-desc').value;
+
+            const components = Array.from(document.querySelectorAll('#edit-bom-container .bom-row-item')).map(row => ({
+                name: row.querySelector('.bom-comp-name').value,
+                qty: parseInt(row.querySelector('.bom-comp-qty').value) || 1,
+                unit: row.querySelector('.bom-comp-unit').value || 'Pcs'
+            }));
+
+            const { error } = await db.from('packages').update({ name, price, description, components }).eq('id', pkgId);
+            if (!error) {
+                showToast(`Package updated!`);
+                closeModal('modal-edit-package-bom');
+                await fetchAllDataFromSupabase();
+            } else { alert(error.message); }
+        }
+
+        function confirmDeletePackage(id) {
+            pkgToDeleteId = id;
+            document.getElementById('delete-pkg-name').innerText = id;
+            document.getElementById('btn-confirm-delete-pkg').onclick = executeDeletePackage;
+            document.getElementById('modal-delete-pkg-confirm').classList.remove('hidden');
+        }
+
+        async function executeDeletePackage() {
+            if (!pkgToDeleteId) return;
+            const { error } = await db.from('packages').delete().eq('id', pkgToDeleteId);
+            if (!error) {
+                showToast('Package deleted!');
+                closeModal('modal-delete-pkg-confirm');
+                await fetchAllDataFromSupabase();
+            }
+        }
+
+        function renderInventoryTable() {
+            const tbody = document.getElementById('inventory-tbody');
+            const searchVal = (document.getElementById('inventory-search')?.value || '').toLowerCase();
+            const categoryVal = document.getElementById('inventory-filter-category')?.value || '';
+
+            const filtered = inventoryData.filter(i => {
+                const matchSearch = i.name.toLowerCase().includes(searchVal);
+                const matchCategory = !categoryVal || i.category === categoryVal;
+                return matchSearch && matchCategory;
+            });
+
+            document.getElementById('inventory-count').innerText = `${filtered.length} Types`;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 text-xs">No component items found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(item => {
+                const available = item.totalStock - item.allocatedStock;
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-4 font-bold text-slate-800">${item.name}</td>
+                        <td class="p-4 text-xs text-slate-600">${item.category}</td>
+                        <td class="p-4 text-center font-bold text-slate-700">${item.totalStock} ${item.unit}</td>
+                        <td class="p-4 text-center font-semibold text-amber-600">${item.allocatedStock} ${item.unit}</td>
+                        <td class="p-4 text-center font-bold text-emerald-600">${available} ${item.unit}</td>
+                        <td class="p-4 text-center">
+                            <div class="flex items-center justify-center space-x-1.5">
+                                <button onclick="openEditComponentModal(${item.id})" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg text-xs"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="confirmDeleteComponent(${item.id})" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg text-xs"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterInventoryTable() { renderInventoryTable(); }
+
+        function openAddComponentModal() {
+            document.getElementById('component-modal-title').innerText = 'Add Component Item';
+            document.getElementById('comp-form-id').value = '';
+            document.getElementById('comp-form-name').value = '';
+            document.getElementById('comp-form-category').value = '';
+            document.getElementById('comp-form-total').value = '10';
+            document.getElementById('comp-form-unit').value = 'Pcs';
+            document.getElementById('comp-form-notes').value = '';
+            document.getElementById('modal-component-form').classList.remove('hidden');
+        }
+
+        function openEditComponentModal(id) {
+            const item = inventoryData.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('component-modal-title').innerText = 'Edit Component Item';
+            document.getElementById('comp-form-id').value = item.id;
+            document.getElementById('comp-form-name').value = item.name;
+            document.getElementById('comp-form-category').value = item.category;
+            document.getElementById('comp-form-total').value = item.totalStock;
+            document.getElementById('comp-form-unit').value = item.unit;
+            document.getElementById('comp-form-notes').value = item.notes || '';
+            document.getElementById('modal-component-form').classList.remove('hidden');
+        }
+
+        async function handleComponentSubmit(e) {
+            e.preventDefault();
+            const editId = document.getElementById('comp-form-id').value;
+            const name = document.getElementById('comp-form-name').value;
+            const category = document.getElementById('comp-form-category').value;
+            const totalStock = parseInt(document.getElementById('comp-form-total').value) || 0;
+            const unit = document.getElementById('comp-form-unit').value;
+            const notes = document.getElementById('comp-form-notes').value;
+
+            if (editId) {
+                const { error } = await db.from('inventory').update({ name, category, total_stock: totalStock, unit, notes }).eq('id', editId);
+                if (!error) {
+                    showToast(`Component updated!`);
+                    closeModal('modal-component-form');
+                    await fetchAllDataFromSupabase();
+                } else { alert(error.message); }
+            } else {
+                const { error } = await db.from('inventory').insert([{ name, category, total_stock: totalStock, allocated_stock: 0, unit, notes }]);
+                if (!error) {
+                    showToast(`New component added!`);
+                    closeModal('modal-component-form');
+                    await fetchAllDataFromSupabase();
+                } else { alert(error.message); }
+            }
+        }
+
+        function confirmDeleteComponent(id) {
+            itemToDeleteId = id;
+            document.getElementById('delete-item-name').innerText = id;
+            document.getElementById('btn-confirm-delete').onclick = executeDeleteComponent;
+            document.getElementById('modal-delete-confirm').classList.remove('hidden');
+        }
+
+        async function executeDeleteComponent() {
+            if (!itemToDeleteId) return;
+            const { error } = await db.from('inventory').delete().eq('id', itemToDeleteId);
+            if (!error) {
+                showToast('Component deleted!');
+                closeModal('modal-delete-confirm');
+                await fetchAllDataFromSupabase();
+            }
+        }
+
+        function showToast(message) {
             const toast = document.getElementById('toast-notification');
-            document.getElementById('toast-message').innerText = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+            document.getElementById('toast-message').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
         }
     </script>
 </body>
