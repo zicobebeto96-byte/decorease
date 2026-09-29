@@ -853,10 +853,10 @@
 
     <!-- Application Logic Scripts connected to Supabase -->
     <script>
-        // Supabase Initialization
+        // Supabase Initialization (menggunakan supabaseClient untuk menghindari bentrok namespace)
         const SUPABASE_URL = 'https://cgbjbgwnpehemcbgaunc.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNnYmpiZ3ducGVoZW1jYmdhdW5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NjA0MjIsImV4cCI6MjEwNjIzNjQyMn0.CliRqByMQ9wf-xrzeQgwZ-IiYVNbN9Byu8HtUZumxFU';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let packagesData = [];
         let bookingsData = [];
@@ -882,7 +882,7 @@
         async function fetchAllData() {
             try {
                 // Fetch Inventory
-                const { data: invData, error: invErr } = await supabase.from('inventory').select('*').order('id', { ascending: true });
+                const { data: invData, error: invErr } = await supabaseClient.from('inventory').select('*').order('id', { ascending: true });
                 if (!invErr && invData) {
                     inventoryData = invData.map(item => ({
                         id: item.id,
@@ -896,13 +896,13 @@
                 }
 
                 // Fetch Packages
-                const { data: pkgData, error: pkgErr } = await supabase.from('packages').select('*').order('id', { ascending: true });
+                const { data: pkgData, error: pkgErr } = await supabaseClient.from('packages').select('*').order('id', { ascending: true });
                 if (!pkgErr && pkgData) {
                     packagesData = pkgData;
                 }
 
                 // Fetch Bookings
-                const { data: bkData, error: bkErr } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
+                const { data: bkData, error: bkErr } = await supabaseClient.from('bookings').select('*').order('created_at', { ascending: false });
                 if (!bkErr && bkData) {
                     bookingsData = bkData.map(b => ({
                         id: b.id,
@@ -933,7 +933,6 @@
         }
 
         function renderDashboard() {
-            // Stats calculation
             const totalBookings = bookingsData.length;
             const confirmedBookings = bookingsData.filter(b => b.status === 'Confirmed').length;
             const totalPackages = packagesData.length;
@@ -953,7 +952,6 @@
             document.getElementById('dash-stat-revenue').innerText = `Rp ${totalRevenue.toLocaleString('en-US')}`;
             document.getElementById('dash-stat-dp').innerText = `Deposit Paid: Rp ${totalDP.toLocaleString('en-US')}`;
 
-            // Upcoming Schedule (First 3 active orders)
             const scheduleContainer = document.getElementById('dashboard-schedule-container');
             const activeBookings = bookingsData.filter(b => b.status !== 'Cancelled' && b.status !== 'Completed').slice(0, 3);
 
@@ -1303,7 +1301,7 @@
 
             if (editId) {
                 const updatedStatus = document.getElementById('new-book-status').value;
-                const { error } = await supabase.from('bookings').update({
+                const { error } = await supabaseClient.from('bookings').update({
                     client, phone, date: dateStr, formatted_date: formattedDate, package: pkg, venue, price, dp, total_tagihan: totalTagihan, transport, custom_components: customComponents, additional, status: updatedStatus
                 }).eq('id', editId);
 
@@ -1316,7 +1314,7 @@
                 }
             } else {
                 const newId = 'BK-' + String(bookingsData.length + 1).padStart(3, '0');
-                const { error } = await supabase.from('bookings').insert([{
+                const { error } = await supabaseClient.from('bookings').insert([{
                     id: newId, client, phone, date: dateStr, formatted_date: formattedDate, venue, package: pkg, price, dp, total_tagihan: totalTagihan, transport, custom_components: customComponents, additional, status: 'Draft'
                 }]);
 
@@ -1343,7 +1341,7 @@
         async function executeDeleteBooking() {
             if (!bookingToDeleteId) return;
 
-            const { error } = await supabase.from('bookings').delete().eq('id', bookingToDeleteId);
+            const { error } = await supabaseClient.from('bookings').delete().eq('id', bookingToDeleteId);
             if (!error) {
                 bookingToDeleteId = null;
                 showToast('Order successfully deleted!');
@@ -1630,7 +1628,7 @@
                 if (compName) components.push({ name: compName, qty, unit });
             });
 
-            const { error } = await supabase.from('packages').insert([{
+            const { error } = await supabaseClient.from('packages').insert([{
                 name, price, description, components
             }]);
 
@@ -1731,7 +1729,7 @@
                 if (compName) components.push({ name: compName, qty, unit });
             });
 
-            const { error } = await supabase.from('packages').update({
+            const { error } = await supabaseClient.from('packages').update({
                 name, price, description, components
             }).eq('id', pkgId);
 
@@ -1758,7 +1756,7 @@
         async function executeDeletePackage() {
             if (!pkgToDeleteId) return;
 
-            const { error } = await supabase.from('packages').delete().eq('id', pkgToDeleteId);
+            const { error } = await supabaseClient.from('packages').delete().eq('id', pkgToDeleteId);
             if (!error) {
                 pkgToDeleteId = null;
                 showToast('Package deleted from catalog!');
@@ -1863,7 +1861,7 @@
             const notes = document.getElementById('comp-form-notes').value;
 
             if (editId) {
-                const { error } = await supabase.from('inventory').update({
+                const { error } = await supabaseClient.from('inventory').update({
                     name, category, total_stock: totalStock, unit, notes
                 }).eq('id', editId);
 
@@ -1875,7 +1873,7 @@
                     showToast("Failed to update inventory item");
                 }
             } else {
-                const { error } = await supabase.from('inventory').insert([{
+                const { error } = await supabaseClient.from('inventory').insert([{
                     name, category, total_stock: totalStock, allocated_stock: 0, unit, notes
                 }]);
 
@@ -1902,7 +1900,7 @@
         async function executeDeleteComponent() {
             if (!itemToDeleteId) return;
 
-            const { error } = await supabase.from('inventory').delete().eq('id', itemToDeleteId);
+            const { error } = await supabaseClient.from('inventory').delete().eq('id', itemToDeleteId);
             if (!error) {
                 itemToDeleteId = null;
                 showToast('Item removed from inventory!');
