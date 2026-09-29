@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DecorEase - Wedding Decor Management System</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Client SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-javascript@2"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        roseGold: {
+                            50: '#FAF5F3', 100: '#F5ECE8', 200: '#EBD6CE',
+                            300: '#D9B2A3', 400: '#C58C77', 500: '#B26C52',
+                            600: '#9E523A', 700: '#7E3E2B',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
+        .font-serif-title { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col md:flex-row">
+
+    <!-- Sidebar -->
+    <aside class="w-full md:w-64 bg-white border-r border-slate-200 shrink-0 flex flex-col justify-between z-20 shadow-sm">
+        <div>
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-roseGold-500 to-roseGold-300 flex items-center justify-center text-white shadow-md shadow-roseGold-200">
+                        <i class="fa-solid font-bold fa-ring text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-serif-title font-bold text-xl text-slate-900 leading-tight">DecorEase</h1>
+                        <p class="text-xs text-roseGold-500 font-medium tracking-wide">WEDDING MANAGEMENT</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-1.5">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 bg-roseGold-50 text-roseGold-600">
+                    <i class="fa-solid fa-chart-pie text-lg w-5"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button onclick="switchTab('bookings')" id="nav-bookings" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all duration-200">
+                    <i class="fa-solid fa-calendar-check text-lg w-5"></i>
+                    <span>Orders & Schedule</span>
+                </button>
+                <button onclick="switchTab('packages')" id="nav-packages" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all duration-200">
+                    <i class="fa-solid fa-wand-magic-sparkles text-lg w-5"></i>
+                    <span>Decor Packages</span>
+                </button>
+                <button onclick="switchTab('inventory')" id="nav-inventory" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all duration-200">
+                    <i class="fa-solid fa-boxes-stacked text-lg w-5"></i>
+                    <span>Component Inventory</span>
+                </button>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-100 m-2 bg-slate-50 rounded-xl flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-full bg-slate-300 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover">
+                </div>
+                <div class="text-left">
+                    <p class="text-xs font-bold text-slate-800">Siti Rahma</p>
+                    <p class="text-[10px] text-slate-500">Lead Decorator</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
+        <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+            <div>
+                <span class="text-xs font-medium text-roseGold-500 uppercase tracking-wider">Internal Business System</span>
+                <h2 id="page-title" class="text-2xl font-bold text-slate-900 font-serif-title">Dashboard Overview</h2>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="openBookingModal()" class="flex items-center justify-center space-x-2 bg-roseGold-500 hover:bg-roseGold-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium shadow-md shadow-roseGold-200 transition-all">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span>New Booking</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Toast Notification -->
+        <div id="toast-notification" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 text-xs z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+            <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+            <span id="toast-message">Action successful!</span>
+        </div>
+
+        <!-- TAB 1: DASHBOARD -->
+        <div id="tab-dashboard" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <p class="text-xs font-semibold uppercase text-slate-400">Total Bookings</p>
+                    <h3 id="stat-total-bookings" class="text-2xl font-bold text-slate-800 mt-1">0 Events</h3>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <p class="text-xs font-semibold uppercase text-slate-400">Confirmed Events</p>
+                    <h3 id="stat-confirmed-events" class="text-2xl font-bold text-roseGold-600 mt-1">0 Events</h3>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <p class="text-xs font-semibold uppercase text-slate-400">Total Revenue</p>
+                    <h3 id="stat-total-revenue" class="text-xl font-bold text-emerald-700 mt-1">Rp 0</h3>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <p class="text-xs font-semibold uppercase text-slate-400">Total Deposit Received</p>
+                    <h3 id="stat-total-dp" class="text-xl font-bold text-emerald-600 mt-1">Rp 0</h3>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+                <h3 class="font-bold text-slate-800 text-lg mb-4">Upcoming Event Schedule</h3>
+                <div id="dashboard-upcoming-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Dynamic Upcoming Schedule -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: BOOKINGS -->
+        <div id="tab-bookings" class="tab-content hidden space-y-6">
+            <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-100 text-xs">
+                <div class="flex flex-wrap items-center gap-3 flex-1">
+                    <div class="relative w-full sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="order-search" oninput="filterBookingsTable()" placeholder="Search customer, code, or venue..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none">
+                    </div>
+                    <select id="filter-status" onchange="filterBookingsTable()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-700">
+                        <option value="">All Statuses</option>
+                        <option value="Draft">Draft</option>
+                        <option value="Deposit Paid">Deposit Paid</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase">
+                                <th class="p-4">Code & Customer</th>
+                                <th class="p-4">Wedding Date</th>
+                                <th class="p-4">Venue</th>
+                                <th class="p-4">Package</th>
+                                <th class="p-4 text-center">Status</th>
+                                <th class="p-4 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-tbody" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: PACKAGES CATALOG -->
+        <div id="tab-packages" class="tab-content hidden space-y-6">
+            <div id="packages-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- TAB 4: COMPONENT INVENTORY -->
+        <div id="tab-inventory" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase">
+                                <th class="p-4">Component Name</th>
+                                <th class="p-4">Category</th>
+                                <th class="p-4 text-center">Total Stock</th>
+                                <th class="p-4 text-center">Allocated</th>
+                                <th class="p-4 text-center">Available</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-tbody" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL BOOKING -->
+    <div id="modal-booking" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-4 text-xs">
+            <h3 id="booking-modal-title" class="text-xl font-bold font-serif-title text-slate-900">New Booking Form</h3>
+            <form onsubmit="handleBookingSubmit(event)" class="space-y-4">
+                <input type="hidden" id="edit-booking-id">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" id="new-book-client" placeholder="Client Name *" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full">
+                    <input type="tel" id="new-book-phone" placeholder="WhatsApp Phone *" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="date" id="new-book-date" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full">
+                    <select id="new-book-package" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full"></select>
+                </div>
+                <input type="text" id="new-book-venue" placeholder="Venue Location *" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="number" id="new-book-price" placeholder="Price (Rp) *" required class="px-3 py-2 bg-slate-50 border rounded-xl w-full font-bold">
+                    <input type="number" id="new-book-dp" placeholder="Deposit DP (Rp)" class="px-3 py-2 bg-slate-50 border rounded-xl w-full font-bold text-emerald-600">
+                </div>
+                <select id="new-book-status" class="px-3 py-2 bg-slate-50 border rounded-xl w-full font-semibold">
+                    <option value="Draft">Draft</option>
+                    <option value="Deposit Paid">Deposit Paid</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <div class="flex justify-end space-x-2 pt-4">
+                    <button type="button" onclick="closeModal('modal-booking')" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-roseGold-500 text-white rounded-xl shadow">Save to Supabase</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        // -------------------------------------------------------------
+        // KONFIGURASI SUPABASE (ISI DENGAN DATA SUPABASE KAMU)
+        // -------------------------------------------------------------
+        const SUPABASE_URL = 'https://cgbjbgwnpehemcbgaunc.supabase.co/rest/v1/';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNnYmpiZ3ducGVoZW1jYmdhdW5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NjA0MjIsImV4cCI6MjEwNjIzNjQyMn0.CliRqByMQ9wf-xrzeQgwZ-IiYVNbN9Byu8HtUZumxFU';
+        
+        const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let bookingsData = [];
+        let packagesData = [];
+        let inventoryData = [];
+
+        window.onload = async function() {
+            await fetchAllData();
+        };
+
+        async function fetchAllData() {
+            showToast('Fetching latest data...');
+            
+            // 1. Fetch Bookings
+            const { data: bData } = await db.from('bookings').select('*').order('created_at', { ascending: false });
+            if (bData) bookingsData = bData;
+
+            // 2. Fetch Packages
+            const { data: pData } = await db.from('packages').select('*');
+            if (pData) packagesData = pData;
+
+            // 3. Fetch Inventory
+            const { data: iData } = await db.from('inventory').select('*');
+            if (iData) inventoryData = iData;
+
+            renderAllViews();
+        }
+
+        function renderAllViews() {
+            renderDashboard();
+            renderBookingsTable();
+            renderPackagesGrid();
+            renderInventoryTable();
+            populatePackageOptions();
+        }
+
+        function renderDashboard() {
+            document.getElementById('stat-total-bookings').innerText = `${bookingsData.length} Events`;
+            const confirmed = bookingsData.filter(b => b.status === 'Confirmed').length;
+            document.getElementById('stat-confirmed-events').innerText = `${confirmed} Events`;
+            
+            const totalRev = bookingsData.reduce((acc, curr) => acc + (Number(curr.price) || 0), 0);
+            const totalDp = bookingsData.reduce((acc, curr) => acc + (Number(curr.dp) || 0), 0);
+
+            document.getElementById('stat-total-revenue').innerText = `Rp ${totalRev.toLocaleString('en-US')}`;
+            document.getElementById('stat-total-dp').innerText = `Rp ${totalDp.toLocaleString('en-US')}`;
+
+            // Upcoming Schedule Cards
+            const grid = document.getElementById('dashboard-upcoming-grid');
+            grid.innerHTML = bookingsData.slice(0, 3).map(item => `
+                <div class="p-4 rounded-xl border border-slate-100 bg-white hover:border-roseGold-200 transition">
+                    <span class="text-xs font-bold text-roseGold-600 block">${item.formatted_date || item.date}</span>
+                    <h4 class="text-sm font-bold text-slate-900 mt-1">${item.client}</h4>
+                    <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> ${item.venue}</p>
+                    <span class="inline-block mt-2 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700">${item.status}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderBookingsTable() {
+            const tbody = document.getElementById('bookings-tbody');
+            const searchVal = (document.getElementById('order-search')?.value || '').toLowerCase();
+            const statusVal = document.getElementById('filter-status')?.value || '';
+
+            const filtered = bookingsData.filter(item => {
+                const matchSearch = !searchVal || item.client.toLowerCase().includes(searchVal) || item.id.toLowerCase().includes(searchVal);
+                const matchStatus = !statusVal || item.status === statusVal;
+                return matchSearch && matchStatus;
+            });
+
+            tbody.innerHTML = filtered.map(item => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-4 font-bold text-slate-900">${item.client} <span class="block text-xs font-normal text-slate-400">${item.id}</span></td>
+                    <td class="p-4 font-medium">${item.formatted_date || item.date}</td>
+                    <td class="p-4 text-xs text-slate-600">${item.venue}</td>
+                    <td class="p-4 text-xs font-bold">${item.package}</td>
+                    <td class="p-4 text-center"><span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">${item.status}</span></td>
+                    <td class="p-4 text-center">
+                        <button onclick="deleteBooking('${item.id}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg text-xs"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderPackagesGrid() {
+            const grid = document.getElementById('packages-grid');
+            grid.innerHTML = packagesData.map(pkg => `
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                    <h4 class="font-bold text-lg text-slate-900">${pkg.name}</h4>
+                    <span class="text-xs font-bold text-roseGold-600">Rp ${Number(pkg.price).toLocaleString('en-US')}</span>
+                    <p class="text-xs text-slate-500 mt-2">${pkg.description || ''}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderInventoryTable() {
+            const tbody = document.getElementById('inventory-tbody');
+            tbody.innerHTML = inventoryData.map(item => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-4 font-bold text-slate-800">${item.name}</td>
+                    <td class="p-4 text-xs text-slate-600">${item.category}</td>
+                    <td class="p-4 text-center font-bold">${item.total_stock} ${item.unit}</td>
+                    <td class="p-4 text-center text-amber-600 font-bold">${item.allocated_stock} ${item.unit}</td>
+                    <td class="p-4 text-center text-emerald-600 font-bold">${item.total_stock - item.allocated_stock} ${item.unit}</td>
+                </tr>
+            `).join('');
+        }
+
+        function populatePackageOptions() {
+            const select = document.getElementById('new-book-package');
+            select.innerHTML = `<option value="">-- Select Package --</option>` + packagesData.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+        }
+
+        // SUPABASE REALTIME SAVE / DELETE
+        async function handleBookingSubmit(e) {
+            e.preventDefault();
+            const client = document.getElementById('new-book-client').value;
+            const phone = document.getElementById('new-book-phone').value;
+            const dateStr = document.getElementById('new-book-date').value;
+            const pkg = document.getElementById('new-book-package').value;
+            const venue = document.getElementById('new-book-venue').value;
+            const price = Number(document.getElementById('new-book-price').value) || 0;
+            const dp = Number(document.getElementById('new-book-dp').value) || 0;
+            const status = document.getElementById('new-book-status').value;
+
+            const dateObj = new Date(dateStr);
+            const formattedDate = dateObj.toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' });
+            const newId = 'BK-00' + (bookingsData.length + 1);
+
+            const payload = {
+                id: newId, client, phone, date: dateStr, formatted_date: formattedDate,
+                venue, package: pkg, price, dp, total_tagihan: Math.max(0, price - dp), status
+            };
+
+            const { error } = await db.from('bookings').insert([payload]);
+            if (!error) {
+                showToast('Booking saved to Supabase Cloud!');
+                closeModal('modal-booking');
+                await fetchAllData();
+            } else {
+                alert('Error saving: ' + error.message);
+            }
+        }
+
+        async function deleteBooking(id) {
+            if (confirm(`Are you sure you want to delete order ${id}?`)) {
+                const { error } = await db.from('bookings').delete().eq('id', id);
+                if (!error) {
+                    showToast('Order deleted!');
+                    await fetchAllData();
+                }
+            }
+        }
+
+        function openBookingModal() {
+            document.getElementById('modal-booking').classList.remove('hidden');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+        function filterBookingsTable() {
+            renderBookingsTable();
+        }
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById('page-title').innerText = tabId.toUpperCase();
+        }
+        function showToast(msg) {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+    </script>
+</body>
+</html>
