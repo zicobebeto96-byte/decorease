@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase JS Client SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-javascript@2"></script>
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
         tailwind.config = {
@@ -19,11 +19,19 @@
                 extend: {
                     colors: {
                         roseGold: {
-                            50: '#FAF5F3', 100: '#F5ECE8', 200: '#EBD6CE',
-                            300: '#D9B2A3', 400: '#C58C77', 500: '#B26C52',
-                            600: '#9E523A', 700: '#7E3E2B',
+                            50: '#FAF5F3',
+                            100: '#F5ECE8',
+                            200: '#EBD6CE',
+                            300: '#D9B2A3',
+                            400: '#C58C77',
+                            500: '#B26C52',
+                            600: '#9E523A',
+                            700: '#7E3E2B',
                         },
-                        amberGold: { 400: '#D4AF37', 50: '#C5A028' },
+                        amberGold: {
+                            400: '#D4AF37',
+                            50: '#C5A028',
+                        },
                         darkSlate: '#1E293B',
                     },
                     fontFamily: {
@@ -35,19 +43,35 @@
         }
     </script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
-        .font-serif-title { font-family: 'Playfair Display', serif; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #F1F5F9; }
-        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFC;
+        }
+        .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col md:flex-row">
 
-    <!-- Sidebar Navigation -->
+    <!-- Sidebar / Mobile Header Navigation -->
     <aside class="w-full md:w-64 bg-white border-r border-slate-200 shrink-0 flex flex-col justify-between z-20 shadow-sm">
         <div>
+            <!-- Logo Section -->
             <div class="p-6 border-b border-slate-100 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-roseGold-500 to-roseGold-300 flex items-center justify-center text-white shadow-md shadow-roseGold-200">
@@ -60,19 +84,23 @@
                 </div>
             </div>
 
+            <!-- Navigation Links -->
             <nav class="p-4 space-y-1.5">
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 bg-roseGold-50 text-roseGold-600">
                     <i class="fa-solid fa-chart-pie text-lg w-5"></i>
                     <span>Dashboard</span>
                 </button>
+
                 <button onclick="switchTab('bookings')" id="nav-bookings" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all duration-200">
                     <i class="fa-solid fa-calendar-check text-lg w-5"></i>
                     <span>Orders & Schedule</span>
                 </button>
+
                 <button onclick="switchTab('packages')" id="nav-packages" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all duration-200">
                     <i class="fa-solid fa-wand-magic-sparkles text-lg w-5"></i>
                     <span>Decor Packages</span>
                 </button>
+
                 <button onclick="switchTab('inventory')" id="nav-inventory" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all duration-200">
                     <i class="fa-solid fa-boxes-stacked text-lg w-5"></i>
                     <span>Component Inventory</span>
@@ -80,6 +108,7 @@
             </nav>
         </div>
 
+        <!-- User Profile Card in Sidebar -->
         <div class="p-4 border-t border-slate-100 m-2 bg-slate-50 rounded-xl flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-full bg-slate-300 overflow-hidden">
@@ -98,13 +127,16 @@
 
     <!-- Main Content Area -->
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
+
+        <!-- Top Navigation Bar -->
         <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
             <div>
                 <span class="text-xs font-medium text-roseGold-500 uppercase tracking-wider">Internal Business System</span>
                 <h2 id="page-title" class="text-2xl font-bold text-slate-900 font-serif-title">Dashboard Overview</h2>
             </div>
+            
             <div class="flex items-center gap-3">
-                <button onclick="openBookingModal()" class="flex items-center justify-center space-x-2 bg-roseGold-500 hover:bg-roseGold-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium shadow-md shadow-roseGold-200 transition-all shrink-0">
+                <button onclick="openBookingModal()" class="flex items-center justify-center space-x-2 bg-roseGold-500 hover:bg-roseGold-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium shadow-md shadow-roseGold-200 transition-all duration-200 shrink-0">
                     <i class="fa-solid fa-plus text-xs"></i>
                     <span>New Booking</span>
                 </button>
@@ -124,14 +156,14 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Total Bookings</p>
-                            <h3 id="dash-total-bookings" class="text-2xl font-bold text-slate-800 mt-1">0 Events</h3>
+                            <h3 id="dash-stat-total" class="text-2xl font-bold text-slate-800 mt-1">0 Events</h3>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-calendar-day"></i>
                         </div>
                     </div>
                     <p class="text-xs text-emerald-600 mt-3 font-medium flex items-center">
-                        <i class="fa-solid fa-arrow-up text-xs mr-1"></i> +12% from last month
+                        <i class="fa-solid fa-arrow-up text-xs mr-1"></i> Active System
                     </p>
                 </div>
 
@@ -139,39 +171,39 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Confirmed Events</p>
-                            <h3 id="dash-confirmed-events" class="text-2xl font-bold text-roseGold-600 mt-1">0 Weddings</h3>
+                            <h3 id="dash-stat-confirmed" class="text-2xl font-bold text-roseGold-600 mt-1">0 Weddings</h3>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-roseGold-50 text-roseGold-500 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-heart"></i>
                         </div>
                     </div>
-                    <p class="text-xs text-slate-500 mt-3 font-medium">Ready for deployment</p>
+                    <p class="text-xs text-slate-500 mt-3 font-medium">Ready for execution</p>
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Active Packages</p>
-                            <h3 id="dash-popular-pkg" class="text-lg font-bold text-slate-800 mt-1">0 Catalog</h3>
+                            <p class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Packages Available</p>
+                            <h3 id="dash-stat-packages" class="text-lg font-bold text-slate-800 mt-1">0 Packages</h3>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-crown"></i>
                         </div>
                     </div>
-                    <p class="text-xs text-slate-500 mt-3 font-medium">Available for clients</p>
+                    <p class="text-xs text-slate-500 mt-3 font-medium">Master Catalog</p>
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Active Revenue</p>
-                            <h3 id="dash-total-revenue" class="text-xl font-bold text-emerald-700 mt-1">Rp 0</h3>
+                            <p class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Total Revenue</p>
+                            <h3 id="dash-stat-revenue" class="text-xl font-bold text-emerald-700 mt-1">Rp 0</h3>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-wallet"></i>
                         </div>
                     </div>
-                    <p id="dash-total-dp" class="text-xs text-emerald-600 mt-3 font-medium">Deposit Paid: Rp 0</p>
+                    <p id="dash-stat-dp" class="text-xs text-emerald-600 mt-3 font-medium">Deposit Paid: Rp 0</p>
                 </div>
             </div>
 
@@ -182,18 +214,25 @@
                         <p class="text-xs text-slate-500">Scheduled event dates and locations</p>
                     </div>
                 </div>
-                <div id="dashboard-upcoming-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+
+                <div id="dashboard-schedule-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Dynamic Dashboard Events -->
+                </div>
             </div>
         </div>
 
         <!-- TAB 2: BOOKINGS & CUSTOMER MANAGEMENT -->
         <div id="tab-bookings" class="tab-content hidden space-y-6">
+            <!-- Order Filter Area -->
             <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm text-xs">
                 <div class="flex flex-wrap items-center gap-3 flex-1">
+                    <!-- Search Field for Orders & Schedule -->
                     <div class="relative w-full sm:w-64">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                         <input type="text" id="order-search" oninput="filterBookingsTable()" placeholder="Search customer name, code, or venue..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                     </div>
+
+                    <!-- Status Filter Dropdown -->
                     <div class="flex items-center space-x-1.5">
                         <label class="font-bold text-slate-700 shrink-0">Status:</label>
                         <select id="filter-status" onchange="filterBookingsTable()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400 cursor-pointer">
@@ -205,15 +244,20 @@
                             <option value="Cancelled">Cancelled</option>
                         </select>
                     </div>
+
+                    <!-- Begin Date Input -->
                     <div class="flex items-center space-x-1.5">
                         <label class="font-bold text-slate-700 shrink-0">Start Date:</label>
                         <input type="date" id="filter-begin-date" onchange="filterBookingsTable()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                     </div>
+
+                    <!-- End Date Input -->
                     <div class="flex items-center space-x-1.5">
                         <label class="font-bold text-slate-700 shrink-0">End Date:</label>
                         <input type="date" id="filter-end-date" onchange="filterBookingsTable()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                     </div>
                 </div>
+
                 <div class="flex items-center space-x-2 shrink-0">
                     <button onclick="resetBookingFilters()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-semibold transition-colors flex items-center space-x-1">
                         <i class="fa-solid fa-rotate-left text-[10px]"></i>
@@ -222,6 +266,7 @@
                 </div>
             </div>
 
+            <!-- Order Data Table -->
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -235,7 +280,9 @@
                                 <th class="p-4 text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="bookings-tbody" class="divide-y divide-slate-100 text-sm"></tbody>
+                        <tbody id="bookings-tbody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Dynamic Content Rendered via JS -->
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -252,7 +299,11 @@
                     <i class="fa-solid fa-plus mr-1"></i> Create New Package
                 </button>
             </div>
-            <div id="packages-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+
+            <!-- Dynamic Package Cards Grid Container -->
+            <div id="packages-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Package Cards Rendered Dinamis via JS -->
+            </div>
         </div>
 
         <!-- TAB 4: COMPONENT INVENTORY -->
@@ -288,7 +339,7 @@
 
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-sm">
+                    <table class="w-full text-left border-collapse text-sm" id="inventory-table">
                         <thead>
                             <tr class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                                 <th class="p-4">Component Name</th>
@@ -299,11 +350,14 @@
                                 <th class="p-4 text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="inventory-tbody" class="divide-y divide-slate-100"></tbody>
+                        <tbody id="inventory-tbody" class="divide-y divide-slate-100">
+                            <!-- Dynamic Content Rendered via JS -->
+                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
+
     </main>
 
     <!-- MODAL: VIEW ORDER DETAILS (READ ONLY) -->
@@ -318,48 +372,105 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
+
             <div class="p-6 space-y-6">
+                <!-- Main Booking Info -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4 bg-slate-50 rounded-xl text-xs">
-                    <div><span class="text-slate-400 block">Booking Code:</span><span id="modal-code" class="font-bold text-slate-800">-</span></div>
-                    <div><span class="text-slate-400 block">Event Date:</span><span id="modal-date" class="font-bold text-slate-800">-</span></div>
-                    <div><span class="text-slate-400 block">Order Status:</span><span id="modal-status-badge" class="inline-block px-2.5 py-0.5 rounded-full font-bold text-[10px] mt-0.5">-</span></div>
-                    <div><span class="text-slate-400 block">Selected Package:</span><span id="modal-package" class="font-bold text-slate-800">-</span></div>
-                    <div class="col-span-2"><span class="text-slate-400 block">Location / Venue:</span><span id="modal-venue" class="font-medium text-slate-800">-</span></div>
+                    <div>
+                        <span class="text-slate-400 block">Booking Code:</span>
+                        <span id="modal-code" class="font-bold text-slate-800">-</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block">Event Date:</span>
+                        <span id="modal-date" class="font-bold text-slate-800">-</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block">Order Status:</span>
+                        <span id="modal-status-badge" class="inline-block px-2.5 py-0.5 rounded-full font-bold text-[10px] mt-0.5">Draft</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block">Selected Package:</span>
+                        <span id="modal-package" class="font-bold text-slate-800">-</span>
+                    </div>
+                    <div class="col-span-2">
+                        <span class="text-slate-400 block">Location / Venue:</span>
+                        <span id="modal-venue" class="font-medium text-slate-800">-</span>
+                    </div>
                 </div>
+
+                <!-- Financial Section -->
                 <div class="grid grid-cols-3 gap-3 p-4 bg-roseGold-50/50 rounded-xl border border-roseGold-100 text-xs">
-                    <div><span class="text-slate-500 block">Package Price / Total:</span><span id="modal-price-val" class="font-bold text-slate-900 text-sm">Rp 0</span></div>
-                    <div><span class="text-slate-500 block">Deposit Paid:</span><span id="modal-dp-val" class="font-bold text-emerald-600 text-sm">Rp 0</span></div>
-                    <div><span class="text-slate-500 block">Remaining Balance:</span><span id="modal-total-tagihan-val" class="font-bold text-roseGold-600 text-sm">Rp 0</span></div>
+                    <div>
+                        <span class="text-slate-500 block">Package Price / Total:</span>
+                        <span id="modal-price-val" class="font-bold text-slate-900 text-sm">Rp 0</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block">Deposit Paid:</span>
+                        <span id="modal-dp-val" class="font-bold text-emerald-600 text-sm">Rp 0</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block">Remaining Balance:</span>
+                        <span id="modal-total-tagihan-val" class="font-bold text-roseGold-600 text-sm">Rp 0</span>
+                    </div>
                 </div>
+
+                <!-- Main Components Section -->
                 <div>
-                    <h4 class="font-bold text-slate-800 text-sm mb-3">Main Decor Components</h4>
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="font-bold text-slate-800 text-sm">Main Decor Components</h4>
+                        <span class="text-xs text-slate-500">Custom Order Components</span>
+                    </div>
+
                     <div class="border border-slate-200 rounded-xl overflow-hidden text-xs">
                         <table class="w-full text-left">
                             <thead class="bg-slate-100 text-slate-600 font-bold border-b border-slate-200">
-                                <tr><th class="p-3">Component Name</th><th class="p-3 text-center">Qty</th><th class="p-3 text-center">Unit</th></tr>
+                                <tr>
+                                    <th class="p-3">Component Name</th>
+                                    <th class="p-3 text-center">Quantity (Qty)</th>
+                                    <th class="p-3 text-center">Unit</th>
+                                </tr>
                             </thead>
-                            <tbody id="modal-components-tbody" class="divide-y divide-slate-100"></tbody>
+                            <tbody id="modal-components-tbody" class="divide-y divide-slate-100">
+                                <!-- Dynamic Component List Rendered via JS -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
+
+                <!-- Additional Section (View Only) -->
                 <div>
-                    <h4 class="font-bold text-slate-800 text-sm mb-3">Additionals (Consumable)</h4>
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="font-bold text-slate-800 text-sm">Additionals (Consumable)</h4>
+                        <span class="text-xs text-slate-400">Consumables / Non-asset</span>
+                    </div>
+
                     <div class="border border-slate-200 rounded-xl overflow-hidden text-xs">
                         <table class="w-full text-left">
                             <thead class="bg-slate-100 text-slate-600 font-bold border-b border-slate-200">
-                                <tr><th class="p-3">Component Name</th><th class="p-3 text-center">Qty</th><th class="p-3 text-center">Unit</th></tr>
+                                <tr>
+                                    <th class="p-3">Component Name</th>
+                                    <th class="p-3 text-center">Quantity (Qty)</th>
+                                    <th class="p-3 text-center">Unit</th>
+                                </tr>
                             </thead>
-                            <tbody id="modal-additional-tbody" class="divide-y divide-slate-100"></tbody>
+                            <tbody id="modal-additional-tbody" class="divide-y divide-slate-100">
+                                <!-- Dynamic Additional Rows -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
+
+                <!-- Transport Section (View Only) -->
                 <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs flex justify-between items-center">
                     <span class="font-bold text-slate-700"><i class="fa-solid fa-truck text-roseGold-500 mr-2"></i>Delivery Fleet / Transport:</span>
                     <span id="modal-transport-val" class="font-bold text-slate-900 text-xs">Not Specified</span>
                 </div>
             </div>
-            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
-                <button onclick="closeModal('modal-detail')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl text-xs">Close</button>
+
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end space-x-2 rounded-b-2xl">
+                <button onclick="closeModal('modal-detail')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl text-xs">
+                    Close
+                </button>
             </div>
         </div>
     </div>
@@ -376,70 +487,102 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
+
             <form onsubmit="handleBookingSubmit(event)" class="p-6 space-y-4 text-xs">
                 <input type="hidden" id="edit-booking-id">
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Couple / Client Name *</label>
-                        <input type="text" id="new-book-client" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                        <input type="text" id="new-book-client" placeholder="e.g. Romeo & Juliet" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">WhatsApp Phone Number *</label>
-                        <input type="tel" id="new-book-phone" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                        <input type="tel" id="new-book-phone" placeholder="0812xxxxxxx" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                     </div>
                 </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Wedding Date *</label>
-                        <input type="date" id="new-book-date" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                        <input type="date" id="new-book-date" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Select Base Decor Package *</label>
-                        <select id="new-book-package" onchange="onBookingPackageChange()" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400"></select>
+                        <select id="new-book-package" onchange="onBookingPackageChange()" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                            <!-- Populated dynamically via JS -->
+                        </select>
                     </div>
                 </div>
+
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Venue Name & Location *</label>
-                    <input type="text" id="new-book-venue" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
+                    <input type="text" id="new-book-venue" placeholder="e.g. Hotel Ritz Carlton, Grand Ballroom" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                 </div>
-                <div class="p-3 bg-slate-50 rounded-xl border space-y-3">
-                    <span class="block font-bold text-xs text-roseGold-600"><i class="fa-solid fa-calculator mr-1"></i> Payment Information</span>
+
+                <!-- FINANCIAL SECTION -->
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                    <span class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider text-roseGold-600"><i class="fa-solid fa-calculator mr-1"></i> Payment & Billing Information</span>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">Price (Rp) *</label>
-                            <input type="number" id="new-book-price" oninput="calculateTotalTagihan()" required class="w-full px-3 py-2 bg-white border rounded-xl font-bold">
+                            <input type="number" id="new-book-price" oninput="calculateTotalTagihan()" min="0" placeholder="0" required class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 font-bold">
                         </div>
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">Deposit (Rp)</label>
-                            <input type="number" id="new-book-dp" oninput="calculateTotalTagihan()" class="w-full px-3 py-2 bg-white border rounded-xl font-bold text-emerald-600">
+                            <input type="number" id="new-book-dp" oninput="calculateTotalTagihan()" min="0" placeholder="0" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 font-bold text-emerald-600">
                         </div>
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">Total Remaining (Rp)</label>
-                            <input type="number" id="new-book-total-tagihan" readonly disabled class="w-full px-3 py-2 bg-slate-200 border rounded-xl font-bold text-roseGold-700 cursor-not-allowed">
+                            <input type="number" id="new-book-total-tagihan" readonly disabled placeholder="0" class="w-full px-3 py-2 bg-slate-200 border border-slate-300 rounded-xl font-bold text-roseGold-700 cursor-not-allowed">
                         </div>
                     </div>
                 </div>
-                <div class="pt-2 border-t">
+
+                <!-- EDITABLE DECOR COMPONENTS SECTION -->
+                <div id="booking-components-section" class="pt-2 border-t border-slate-100">
                     <div class="flex items-center justify-between mb-2">
-                        <label class="block font-bold text-slate-700">Main Decor Components (Custom)</label>
-                        <button type="button" onclick="addBookingCustomComponentRow()" class="px-3 py-1 bg-roseGold-50 text-roseGold-600 rounded-lg font-bold text-xs"><i class="fa-solid fa-plus text-[10px] mr-1"></i> Add Component</button>
+                        <div>
+                            <label class="block font-bold text-slate-700">Main Decor Components (Custom)</label>
+                            <span class="text-[10px] text-slate-400">Changes here do not affect the master catalog package</span>
+                        </div>
+                        <button type="button" onclick="addBookingCustomComponentRow()" class="px-3 py-1 bg-roseGold-50 text-roseGold-600 rounded-lg font-bold text-xs hover:bg-roseGold-100 transition-colors">
+                            <i class="fa-solid fa-plus text-[10px] mr-1"></i> Add Package Component
+                        </button>
                     </div>
-                    <div id="booking-components-container" class="space-y-2"></div>
+
+                    <div id="booking-components-container" class="space-y-2">
+                        <!-- Dynamic Editable Component Rows -->
+                    </div>
                 </div>
-                <div class="pt-2 border-t">
+
+                <!-- ADDITIONAL SECTION -->
+                <div class="pt-2 border-t border-slate-100">
                     <div class="flex justify-between items-center mb-2">
-                        <label class="block font-bold text-slate-700">Additionals (Consumable Items)</label>
-                        <button type="button" onclick="addAdditionalRowInput()" class="px-3 py-1 bg-roseGold-50 text-roseGold-600 rounded-lg font-bold text-xs"><i class="fa-solid fa-plus text-[10px] mr-1"></i> Add Item</button>
+                        <div>
+                            <label class="block font-bold text-slate-700">Additionals (Consumable Items)</label>
+                            <span class="text-[10px] text-slate-400">Single-use custom items (not tracked in asset inventory)</span>
+                        </div>
+                        <button type="button" onclick="addAdditionalRowInput()" class="px-3 py-1 bg-roseGold-50 text-roseGold-600 rounded-lg font-bold text-xs hover:bg-roseGold-100 transition-colors">
+                            <i class="fa-solid fa-plus text-[10px] mr-1"></i> Add Additional Item
+                        </button>
                     </div>
-                    <div id="additional-rows-container" class="space-y-2"></div>
+
+                    <div id="additional-rows-container" class="space-y-2">
+                        <!-- Dynamic Additional Row Container -->
+                    </div>
                 </div>
+
+                <!-- TRANSPORT FIELD -->
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Transport / Delivery Fleet</label>
-                    <input type="text" id="new-book-transport" class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                    <input type="text" id="new-book-transport" placeholder="e.g. Grand Max Pickup / Engkel Box Truck" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                 </div>
+
+                <!-- Order Status Dropdown -->
                 <div id="booking-status-field-container">
                     <label class="block font-bold text-slate-700 mb-1">Order Status *</label>
-                    <select id="new-book-status" class="w-full px-3 py-2 bg-slate-50 border rounded-xl font-semibold">
+                    <select id="new-book-status" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-roseGold-400 cursor-pointer">
                         <option value="Draft">Draft</option>
                         <option value="Deposit Paid">Deposit Paid</option>
                         <option value="Confirmed">Confirmed</option>
@@ -447,9 +590,14 @@
                         <option value="Cancelled">Cancelled</option>
                     </select>
                 </div>
-                <div class="pt-4 border-t flex justify-end space-x-2">
-                    <button type="button" onclick="closeModal('modal-booking')" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold rounded-xl">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-roseGold-500 text-white font-semibold rounded-xl shadow-md">Save Order</button>
+
+                <div class="pt-4 border-t border-slate-100 flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('modal-booking')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-roseGold-500 hover:bg-roseGold-600 text-white font-semibold rounded-xl shadow-md">
+                        Save Order
+                    </button>
                 </div>
             </form>
         </div>
@@ -457,51 +605,80 @@
 
     <!-- MODAL: CONFIRM DELETE BOOKING -->
     <div id="modal-delete-booking-confirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border">
-            <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-100">
+            <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
             <div>
                 <h4 class="font-bold text-slate-900 text-base">Delete This Order?</h4>
-                <p class="text-xs text-slate-500 mt-1">Order for "<span id="delete-booking-client" class="font-bold text-slate-800"></span>" will be removed.</p>
+                <p class="text-xs text-slate-500 mt-1">Order for "<span id="delete-booking-client" class="font-bold text-slate-800"></span>" will be removed from schedule.</p>
             </div>
             <div class="flex justify-center space-x-2 pt-2">
-                <button onclick="closeModal('modal-delete-booking-confirm')" class="px-4 py-2 bg-slate-100 text-slate-700 font-semibold rounded-xl text-xs">Cancel</button>
-                <button id="btn-confirm-delete-booking" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-xl text-xs shadow-md">Yes, Delete</button>
+                <button onclick="closeModal('modal-delete-booking-confirm')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs">
+                    Cancel
+                </button>
+                <button id="btn-confirm-delete-booking" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl text-xs shadow-md">
+                    Yes, Delete Order
+                </button>
             </div>
         </div>
     </div>
 
     <!-- MODAL: CREATE NEW PACKAGE -->
     <div id="modal-package-form" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border">
-            <div class="p-6 border-b flex items-center justify-between sticky top-0 bg-white z-10">
+        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
                 <div>
                     <h3 class="text-xl font-bold font-serif-title text-slate-900">Create New Decor Package</h3>
+                    <p class="text-xs text-slate-500">Standard package registration form and BOM components</p>
                 </div>
-                <button onclick="closeModal('modal-package-form')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeModal('modal-package-form')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
+
             <form onsubmit="handlePackageSubmit(event)" class="p-6 space-y-4 text-xs">
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Package Name *</label>
-                    <input type="text" id="pkg-name" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                    <input type="text" id="pkg-name" required placeholder="e.g. Bohemian Minimalist Dream" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                 </div>
+
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Estimated Package Price (Rp) *</label>
-                    <input type="number" id="pkg-price" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                    <input type="number" id="pkg-price" required placeholder="30000000" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                 </div>
+
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Description</label>
-                    <textarea id="pkg-desc" rows="2" class="w-full px-3 py-2 bg-slate-50 border rounded-xl"></textarea>
+                    <label class="block font-bold text-slate-700 mb-1">Short Description <span class="text-slate-400 font-normal">(Optional)</span></label>
+                    <textarea id="pkg-desc" rows="2" placeholder="Describe theme nuance and venue suitability..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400"></textarea>
                 </div>
+
                 <div class="pt-2">
                     <div class="flex justify-between items-center mb-2">
                         <label class="block font-bold text-slate-700">Main Package Components (BOM)</label>
-                        <button type="button" onclick="addBomRowInput('bom-rows-container')" class="text-xs font-bold text-roseGold-600"><i class="fa-solid fa-plus text-[10px]"></i> Add Row</button>
+                        <button type="button" onclick="addBomRowInput('bom-rows-container')" class="text-xs font-bold text-roseGold-600 hover:underline"><i class="fa-solid fa-plus text-[10px]"></i> Add Row</button>
                     </div>
-                    <div id="bom-rows-container" class="space-y-3"></div>
+
+                    <div class="flex items-center justify-between p-3 mb-3 bg-roseGold-50/60 border border-roseGold-100 rounded-xl text-slate-700">
+                        <span class="font-medium text-xs"><i class="fa-solid fa-boxes-packing text-roseGold-500 mr-1.5"></i> Component Summary:</span>
+                        <div class="flex space-x-3 text-xs font-bold">
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-roseGold-200 text-roseGold-700">Total Types: <span id="create-summary-types">0</span></span>
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-roseGold-200 text-roseGold-700">Total Qty: <span id="create-summary-qty">0</span> Items</span>
+                        </div>
+                    </div>
+
+                    <div id="bom-rows-container" class="space-y-3">
+                        <!-- Dynamic BOM Input Row Container -->
+                    </div>
                 </div>
-                <div class="pt-4 border-t flex justify-end space-x-2">
-                    <button type="button" onclick="closeModal('modal-package-form')" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold rounded-xl">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-roseGold-500 text-white font-semibold rounded-xl shadow-md">Save Package</button>
+
+                <div class="pt-4 border-t border-slate-100 flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('modal-package-form')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-roseGold-500 hover:bg-roseGold-600 text-white font-semibold rounded-xl shadow-md">
+                        Save New Package
+                    </button>
                 </div>
             </form>
         </div>
@@ -509,61 +686,113 @@
 
     <!-- MODAL: EDIT / VIEW DECOR PACKAGE -->
     <div id="modal-edit-package-bom" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border">
-            <div class="p-6 border-b flex items-center justify-between sticky top-0 bg-white z-10">
+        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
                 <div>
-                    <span id="edit-bom-badge" class="text-xs font-bold text-roseGold-500 uppercase">Package Details</span>
+                    <span id="edit-bom-badge" class="text-xs font-bold text-roseGold-500 uppercase tracking-wider">Package Details</span>
                     <h3 id="edit-bom-title" class="text-xl font-bold font-serif-title text-slate-900">Decor Package Details</h3>
                 </div>
-                <button onclick="closeModal('modal-edit-package-bom')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeModal('modal-edit-package-bom')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
+
             <form id="pkg-modal-form" onsubmit="handleSavePackageFull(event)" class="p-6 space-y-4 text-xs">
                 <input type="hidden" id="edit-pkg-id">
+
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Package Name *</label>
-                    <input type="text" id="edit-pkg-name" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                    <input type="text" id="edit-pkg-name" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                 </div>
+
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Estimated Price (Rp) *</label>
-                    <input type="number" id="edit-pkg-price" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                    <label class="block font-bold text-slate-700 mb-1">Estimated Package Price (Rp) *</label>
+                    <input type="number" id="edit-pkg-price" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                 </div>
+
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Description</label>
-                    <textarea id="edit-pkg-desc" rows="2" class="w-full px-3 py-2 bg-slate-50 border rounded-xl"></textarea>
+                    <label class="block font-bold text-slate-700 mb-1">Short Description <span class="text-slate-400 font-normal">(Optional)</span></label>
+                    <textarea id="edit-pkg-desc" rows="2" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400"></textarea>
                 </div>
+
                 <div class="pt-2">
                     <div class="flex justify-between items-center mb-2">
-                        <label class="block font-bold text-slate-700">Main Components (BOM)</label>
-                        <button type="button" id="btn-add-edit-bom-row" onclick="addBomRowInput('edit-bom-container')" class="px-3 py-1 bg-roseGold-50 text-roseGold-600 rounded-lg font-bold text-xs"><i class="fa-solid fa-plus mr-1"></i> Add Component</button>
+                        <label class="block font-bold text-slate-700">Main Package Components (BOM)</label>
+                        <button type="button" id="btn-add-edit-bom-row" onclick="addBomRowInput('edit-bom-container')" class="px-3 py-1 bg-roseGold-50 text-roseGold-600 rounded-lg font-bold text-xs hover:bg-roseGold-100">
+                            <i class="fa-solid fa-plus mr-1"></i> Add Component
+                        </button>
                     </div>
-                    <div id="edit-bom-container" class="space-y-3"></div>
+
+                    <div class="flex items-center justify-between p-3 mb-3 bg-roseGold-50/60 border border-roseGold-100 rounded-xl text-slate-700">
+                        <span class="font-medium text-xs"><i class="fa-solid fa-boxes-packing text-roseGold-500 mr-1.5"></i> Component Summary:</span>
+                        <div class="flex space-x-3 text-xs font-bold">
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-roseGold-200 text-roseGold-700">Total Types: <span id="edit-summary-types">0</span></span>
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-roseGold-200 text-roseGold-700">Total Qty: <span id="edit-summary-qty">0</span> Items</span>
+                        </div>
+                    </div>
+
+                    <div id="edit-bom-container" class="space-y-3">
+                        <!-- Dynamic Component Rows -->
+                    </div>
                 </div>
-                <div class="pt-4 border-t flex justify-end space-x-2">
-                    <button type="button" onclick="closeModal('modal-edit-package-bom')" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold rounded-xl">Close</button>
-                    <button type="submit" id="btn-save-pkg-modal" class="px-4 py-2 bg-roseGold-500 text-white font-semibold rounded-xl shadow-md">Save Changes</button>
+
+                <div class="pt-4 border-t border-slate-100 flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('modal-edit-package-bom')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl">
+                        Close
+                    </button>
+                    <button type="submit" id="btn-save-pkg-modal" class="px-4 py-2 bg-roseGold-500 hover:bg-roseGold-600 text-white font-semibold rounded-xl shadow-md">
+                        Save Changes
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL: ADD / EDIT COMPONENT INVENTORY -->
+    <!-- MODAL: CONFIRM DELETE PACKAGE -->
+    <div id="modal-delete-pkg-confirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-100">
+            <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 text-base">Delete This Package?</h4>
+                <p class="text-xs text-slate-500 mt-1">Package "<span id="delete-pkg-name" class="font-bold text-slate-800"></span>" will be removed from master catalog.</p>
+            </div>
+            <div class="flex justify-center space-x-2 pt-2">
+                <button onclick="closeModal('modal-delete-pkg-confirm')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs">
+                    Cancel
+                </button>
+                <button id="btn-confirm-delete-pkg" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl text-xs shadow-md">
+                    Yes, Delete Package
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT COMPONENT FORM -->
     <div id="modal-component-form" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border">
-            <div class="p-6 border-b flex items-center justify-between sticky top-0 bg-white z-10">
+        <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
                 <div>
                     <h3 id="component-modal-title" class="text-xl font-bold font-serif-title text-slate-900">Add Component Item</h3>
+                    <p class="text-xs text-slate-500">Enter new component item details into inventory master</p>
                 </div>
-                <button onclick="closeModal('modal-component-form')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeModal('modal-component-form')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
+
             <form onsubmit="handleComponentSubmit(event)" class="p-6 space-y-4 text-xs">
                 <input type="hidden" id="comp-form-id">
+
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Component Name *</label>
-                    <input type="text" id="comp-form-name" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                    <label class="block font-bold text-slate-700 mb-1">Component / Item Name *</label>
+                    <input type="text" id="comp-form-name" required placeholder="e.g. Timber Frame Wooden Arch" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                 </div>
+
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Category *</label>
-                    <select id="comp-form-category" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                    <select id="comp-form-category" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                         <option value="">-- Select Category --</option>
                         <option value="Backdrop & Frame">Backdrop & Frame</option>
                         <option value="Lighting">Lighting</option>
@@ -572,67 +801,65 @@
                         <option value="Fabric & Drapery">Fabric & Drapery</option>
                     </select>
                 </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Total Stock *</label>
-                        <input type="number" id="comp-form-total" required min="1" class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                        <input type="number" id="comp-form-total" required min="1" placeholder="5" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Unit *</label>
-                        <input type="text" id="comp-form-unit" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                        <input type="text" id="comp-form-unit" required placeholder="Set / Unit / Pcs" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                     </div>
                 </div>
+
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Notes / Condition Details</label>
-                    <textarea id="comp-form-notes" rows="3" class="w-full px-3 py-2 bg-slate-50 border rounded-xl"></textarea>
+                    <textarea id="comp-form-notes" rows="3" placeholder="Physical condition, maintenance notes, etc..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400"></textarea>
                 </div>
-                <div class="pt-4 border-t flex justify-end space-x-2">
-                    <button type="button" onclick="closeModal('modal-component-form')" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold rounded-xl">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-roseGold-500 text-white font-semibold rounded-xl shadow-md">Save Component</button>
+
+                <div class="pt-4 border-t border-slate-100 flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('modal-component-form')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-xl">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-roseGold-500 hover:bg-roseGold-600 text-white font-semibold rounded-xl shadow-md">
+                        Save Component
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL: CONFIRM DELETE ITEM -->
+    <!-- MODAL: CONFIRM DELETE STOCK -->
     <div id="modal-delete-confirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border">
-            <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-100">
+            <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
             <div>
                 <h4 class="font-bold text-slate-900 text-base">Delete This Component?</h4>
-                <p class="text-xs text-slate-500 mt-1">Item "<span id="delete-item-name" class="font-bold text-slate-800"></span>" will be removed.</p>
+                <p class="text-xs text-slate-500 mt-1">Item "<span id="delete-item-name" class="font-bold text-slate-800"></span>" will be permanently deleted from inventory.</p>
             </div>
             <div class="flex justify-center space-x-2 pt-2">
-                <button onclick="closeModal('modal-delete-confirm')" class="px-4 py-2 bg-slate-100 text-slate-700 font-semibold rounded-xl text-xs">Cancel</button>
-                <button id="btn-confirm-delete" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-xl text-xs shadow-md">Yes, Delete Item</button>
+                <button onclick="closeModal('modal-delete-confirm')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs">
+                    Cancel
+                </button>
+                <button id="btn-confirm-delete" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl text-xs shadow-md">
+                    Yes, Delete Item
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: CONFIRM DELETE PACKAGE -->
-    <div id="modal-delete-pkg-confirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border">
-            <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
-            <div>
-                <h4 class="font-bold text-slate-900 text-base">Delete This Package?</h4>
-                <p class="text-xs text-slate-500 mt-1">Package "<span id="delete-pkg-name" class="font-bold text-slate-800"></span>" will be removed.</p>
-            </div>
-            <div class="flex justify-center space-x-2 pt-2">
-                <button onclick="closeModal('modal-delete-pkg-confirm')" class="px-4 py-2 bg-slate-100 text-slate-700 font-semibold rounded-xl text-xs">Cancel</button>
-                <button id="btn-confirm-delete-pkg" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-xl text-xs shadow-md">Yes, Delete Package</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- SCRIPTS INTEGRATED WITH SUPABASE -->
+    <!-- Application Logic Scripts connected to Supabase -->
     <script>
+        // Supabase Initialization
         const SUPABASE_URL = 'https://cgbjbgwnpehemcbgaunc.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNnYmpiZ3ducGVoZW1jYmdhdW5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NjA0MjIsImV4cCI6MjEwNjIzNjQyMn0.CliRqByMQ9wf-xrzeQgwZ-IiYVNbN9Byu8HtUZumxFU';
-        
-        const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let bookingsData = [];
         let packagesData = [];
+        let bookingsData = [];
         let inventoryData = [];
 
         let itemToDeleteId = null;
@@ -648,59 +875,50 @@
         };
 
         window.onload = async function() {
-            await fetchAllDataFromSupabase();
+            await fetchAllData();
+            populatePackageOptions();
         };
 
-        async function fetchAllDataFromSupabase() {
-            showToast('Loading data from Supabase Cloud...');
+        async function fetchAllData() {
             try {
-                // 1. Fetch Bookings
-                const { data: bData, error: bErr } = await db.from('bookings').select('*').order('created_at', { ascending: false });
-                if (bErr) console.error(bErr);
-                if (bData) {
-                    bookingsData = bData.map(b => ({
+                // Fetch Inventory
+                const { data: invData, error: invErr } = await supabase.from('inventory').select('*').order('id', { ascending: true });
+                if (!invErr && invData) {
+                    inventoryData = invData.map(item => ({
+                        id: item.id,
+                        name: item.name,
+                        category: item.category,
+                        totalStock: item.total_stock,
+                        allocatedStock: item.allocated_stock || 0,
+                        unit: item.unit,
+                        notes: item.notes || ''
+                    }));
+                }
+
+                // Fetch Packages
+                const { data: pkgData, error: pkgErr } = await supabase.from('packages').select('*').order('id', { ascending: true });
+                if (!pkgErr && pkgData) {
+                    packagesData = pkgData;
+                }
+
+                // Fetch Bookings
+                const { data: bkData, error: bkErr } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
+                if (!bkErr && bkData) {
+                    bookingsData = bkData.map(b => ({
                         id: b.id,
                         client: b.client,
                         phone: b.phone,
                         date: b.date,
-                        formattedDate: b.formatted_date || b.date,
+                        formattedDate: b.formatted_date,
                         venue: b.venue,
                         package: b.package,
                         price: Number(b.price) || 0,
                         dp: Number(b.dp) || 0,
                         totalTagihan: Number(b.total_tagihan) || 0,
-                        status: b.status || 'Draft',
-                        transport: b.transport || '',
+                        status: b.status,
                         customComponents: b.custom_components || [],
-                        additional: b.additional || []
-                    }));
-                }
-
-                // 2. Fetch Packages
-                const { data: pData, error: pErr } = await db.from('packages').select('*');
-                if (pErr) console.error(pErr);
-                if (pData) {
-                    packagesData = pData.map(p => ({
-                        id: p.id,
-                        name: p.name,
-                        price: Number(p.price) || 0,
-                        description: p.description,
-                        components: p.components || []
-                    }));
-                }
-
-                // 3. Fetch Inventory
-                const { data: iData, error: iErr } = await db.from('inventory').select('*').order('name', { ascending: true });
-                if (iErr) console.error(iErr);
-                if (iData) {
-                    inventoryData = iData.map(i => ({
-                        id: i.id,
-                        name: i.name,
-                        category: i.category,
-                        totalStock: Number(i.total_stock) || 0,
-                        allocatedStock: Number(i.allocated_stock) || 0,
-                        unit: i.unit,
-                        notes: i.notes
+                        additional: b.additional || [],
+                        transport: b.transport || ''
                     }));
                 }
 
@@ -708,75 +926,194 @@
                 renderBookingsTable();
                 renderPackagesGrid();
                 renderInventoryTable();
-                populatePackageOptions();
-
             } catch (err) {
-                console.error(err);
-                alert('Connection error to Supabase!');
-            }
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(b => {
-                b.classList.remove('bg-roseGold-50', 'text-roseGold-600');
-                b.classList.add('text-slate-600');
-            });
-
-            const activeTab = document.getElementById(`tab-${tabId}`);
-            if (activeTab) activeTab.classList.remove('hidden');
-
-            const activeNav = document.getElementById(`nav-${tabId}`);
-            if (activeNav) {
-                activeNav.classList.add('bg-roseGold-50', 'text-roseGold-600');
-                activeNav.classList.remove('text-slate-600');
-            }
-
-            const pageTitle = document.getElementById('page-title');
-            switch (tabId) {
-                case 'dashboard': pageTitle.innerText = 'Dashboard Overview'; break;
-                case 'bookings': pageTitle.innerText = 'Customer Orders & Schedule'; renderBookingsTable(); break;
-                case 'packages': pageTitle.innerText = 'Decor Package Catalog & BOM'; renderPackagesGrid(); break;
-                case 'inventory': pageTitle.innerText = 'Warehouse Component Inventory'; renderInventoryTable(); break;
+                console.error("Error fetching data from Supabase:", err);
+                showToast("Error loading data from database");
             }
         }
 
         function renderDashboard() {
-            document.getElementById('dash-total-bookings').innerText = `${bookingsData.length} Events`;
-            const confirmed = bookingsData.filter(b => b.status === 'Confirmed').length;
-            document.getElementById('dash-confirmed-events').innerText = `${confirmed} Weddings`;
-            document.getElementById('dash-popular-pkg').innerText = `${packagesData.length} Catalog`;
+            // Stats calculation
+            const totalBookings = bookingsData.length;
+            const confirmedBookings = bookingsData.filter(b => b.status === 'Confirmed').length;
+            const totalPackages = packagesData.length;
+            
+            let totalRevenue = 0;
+            let totalDP = 0;
+            bookingsData.forEach(b => {
+                if (b.status !== 'Cancelled') {
+                    totalRevenue += (b.price || 0);
+                    totalDP += (b.dp || 0);
+                }
+            });
 
-            const totalRev = bookingsData.reduce((acc, curr) => acc + (curr.price || 0), 0);
-            const totalDp = bookingsData.reduce((acc, curr) => acc + (curr.dp || 0), 0);
+            document.getElementById('dash-stat-total').innerText = `${totalBookings} Events`;
+            document.getElementById('dash-stat-confirmed').innerText = `${confirmedBookings} Weddings`;
+            document.getElementById('dash-stat-packages').innerText = `${totalPackages} Packages`;
+            document.getElementById('dash-stat-revenue').innerText = `Rp ${totalRevenue.toLocaleString('en-US')}`;
+            document.getElementById('dash-stat-dp').innerText = `Deposit Paid: Rp ${totalDP.toLocaleString('en-US')}`;
 
-            document.getElementById('dash-total-revenue').innerText = `Rp ${totalRev.toLocaleString('en-US')}`;
-            document.getElementById('dash-total-dp').innerText = `Deposit Paid: Rp ${totalDp.toLocaleString('en-US')}`;
+            // Upcoming Schedule (First 3 active orders)
+            const scheduleContainer = document.getElementById('dashboard-schedule-container');
+            const activeBookings = bookingsData.filter(b => b.status !== 'Cancelled' && b.status !== 'Completed').slice(0, 3);
 
-            const grid = document.getElementById('dashboard-upcoming-grid');
-            if (bookingsData.length === 0) {
-                grid.innerHTML = `<div class="col-span-3 text-slate-400 text-xs py-4 text-center">No scheduled events.</div>`;
+            if (activeBookings.length === 0) {
+                scheduleContainer.innerHTML = `
+                    <div class="col-span-3 p-6 text-center text-slate-400 text-xs">
+                        No upcoming active event schedules.
+                    </div>
+                `;
                 return;
             }
 
-            grid.innerHTML = bookingsData.slice(0, 3).map(item => `
-                <div class="flex items-start space-x-4 p-4 rounded-xl border border-slate-100 hover:border-roseGold-200 bg-white hover:bg-roseGold-50/20 transition-all cursor-pointer" onclick="openDetailModal('${item.id}')">
-                    <div class="flex-none text-center bg-roseGold-100 rounded-xl p-2.5 w-16">
-                        <span class="block text-xs uppercase font-bold text-roseGold-600">Event</span>
-                        <span class="block text-sm font-bold text-roseGold-700">${item.formattedDate || item.date}</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center justify-between">
-                            <h4 class="text-sm font-bold text-slate-900 truncate">${item.client}</h4>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-700">${item.status}</span>
+            scheduleContainer.innerHTML = activeBookings.map(item => {
+                const dateParts = item.date ? item.date.split('-') : ['2026', '10', '01'];
+                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const monthStr = monthNames[parseInt(dateParts[1]) - 1] || 'Oct';
+                const dayStr = dateParts[2] || '01';
+                const style = statusStyles[item.status] || statusStyles['Draft'];
+
+                return `
+                    <div class="flex items-start space-x-4 p-4 rounded-xl border border-slate-100 hover:border-roseGold-200 bg-white hover:bg-roseGold-50/20 transition-all cursor-pointer" onclick="openDetailModal('${item.id}')">
+                        <div class="flex-none text-center bg-roseGold-100 rounded-xl p-2.5 w-16">
+                            <span class="block text-xs uppercase font-bold text-roseGold-600">${monthStr}</span>
+                            <span class="block text-xl font-bold text-roseGold-700">${dayStr}</span>
                         </div>
-                        <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i> ${item.venue}</p>
-                        <div class="mt-2 text-xs text-slate-600">
-                            <div><i class="fa-solid fa-wand-magic-sparkles mr-1 text-roseGold-400"></i> ${item.package}</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between">
+                                <h4 class="text-sm font-bold text-slate-900 truncate">${item.client}</h4>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${style.bg} ${style.text}">${item.status}</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i> ${item.venue}</p>
+                            <div class="mt-2 text-xs text-slate-600 space-y-1">
+                                <div><i class="fa-solid fa-wand-magic-sparkles mr-1 text-roseGold-400"></i> ${item.package}</div>
+                            </div>
                         </div>
                     </div>
+                `;
+            }).join('');
+        }
+
+        function populatePackageOptions() {
+            const pkgSelect = document.getElementById('new-book-package');
+            if (!pkgSelect) return;
+
+            pkgSelect.innerHTML = `<option value="">-- Select Decor Package --</option>` +
+                packagesData.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+        }
+
+        function calculateTotalTagihan() {
+            const price = parseInt(document.getElementById('new-book-price')?.value) || 0;
+            const dp = parseInt(document.getElementById('new-book-dp')?.value) || 0;
+            const totalTagihanInput = document.getElementById('new-book-total-tagihan');
+
+            if (totalTagihanInput) {
+                const result = Math.max(0, price - dp);
+                totalTagihanInput.value = result;
+            }
+        }
+
+        function createBookingCustomComponentRowHtml(selectedName = '', qty = 1, unitVal = '') {
+            const rowId = 'book-comp-row-' + Math.random().toString(36).substr(2, 9);
+            const defaultItem = inventoryData.find(i => i.name === selectedName) || inventoryData[0];
+            const initialUnit = unitVal || (defaultItem ? defaultItem.unit : 'Pcs');
+
+            return `
+                <div class="flex gap-2 items-center booking-comp-row-item" id="${rowId}">
+                    <div class="relative flex-1">
+                        <div class="relative">
+                            <input type="text" value="${selectedName || (defaultItem ? defaultItem.name : '')}" 
+                                placeholder="Search / Select Component..." 
+                                onfocus="showDropdownOptions('${rowId}')" 
+                                oninput="filterDropdownOptions('${rowId}', this.value)" 
+                                required 
+                                class="book-comp-name w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 text-xs font-medium">
+                            <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
+                        </div>
+                        
+                        <div class="dropdown-options hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-30 max-h-40 overflow-y-auto divide-y divide-slate-100">
+                            ${inventoryData.map(item => `
+                                <div onclick="selectBookingCustomComponent('${rowId}', '${item.name.replace(/'/g, "\\'")}', '${item.unit}')" 
+                                     class="p-2.5 hover:bg-roseGold-50 cursor-pointer flex justify-between items-center text-xs">
+                                    <span class="font-bold text-slate-800">${item.name}</span>
+                                    <span class="text-[10px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded">${item.unit}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <input type="number" min="1" value="${qty}" placeholder="Qty" required class="book-comp-qty w-20 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 font-bold text-center text-xs">
+                    
+                    <input type="text" value="${initialUnit}" readonly disabled class="book-comp-unit w-24 px-3 py-2 bg-slate-200 text-slate-500 font-semibold border border-slate-200 rounded-xl text-center text-xs cursor-not-allowed">
+
+                    <button type="button" onclick="removeBookingCustomComponentRow('${rowId}')" class="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-50 transition-colors">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
                 </div>
-            `).join('');
+            `;
+        }
+
+        function addBookingCustomComponentRow(name = '', qty = 1, unit = '') {
+            const container = document.getElementById('booking-components-container');
+            const defaultItem = inventoryData[0];
+            container.insertAdjacentHTML('beforeend', createBookingCustomComponentRowHtml(name || (defaultItem ? defaultItem.name : ''), qty, unit || (defaultItem ? defaultItem.unit : 'Pcs')));
+        }
+
+        function removeBookingCustomComponentRow(rowId) {
+            const row = document.getElementById(rowId);
+            if (row) row.remove();
+        }
+
+        function selectBookingCustomComponent(rowId, name, unit) {
+            const row = document.getElementById(rowId);
+            if (!row) return;
+            row.querySelector('.book-comp-name').value = name;
+            row.querySelector('.book-comp-unit').value = unit;
+            row.querySelector('.dropdown-options').classList.add('hidden');
+        }
+
+        function createAdditionalRowHtml(name = '', qty = 1, unit = 'Pcs') {
+            const rowId = 'add-row-' + Math.random().toString(36).substr(2, 9);
+            return `
+                <div class="flex gap-2 items-center additional-row-item" id="${rowId}">
+                    <input type="text" value="${name}" placeholder="Additional Item Name..." required class="add-comp-name flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 text-xs font-medium">
+                    <input type="number" min="1" value="${qty}" placeholder="Qty" required class="add-comp-qty w-20 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 text-xs font-bold text-center">
+                    <input type="text" value="${unit}" placeholder="Unit (Pcs/Roll)" required class="add-comp-unit w-28 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 text-xs text-center font-medium">
+                    <button type="button" onclick="removeAdditionalRow('${rowId}')" class="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-50 transition-colors">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        function addAdditionalRowInput(name = '', qty = 1, unit = 'Pcs') {
+            const container = document.getElementById('additional-rows-container');
+            container.insertAdjacentHTML('beforeend', createAdditionalRowHtml(name, qty, unit));
+        }
+
+        function removeAdditionalRow(rowId) {
+            const row = document.getElementById(rowId);
+            if (row) row.remove();
+        }
+
+        function onBookingPackageChange() {
+            const selectedName = document.getElementById('new-book-package').value;
+            const container = document.getElementById('booking-components-container');
+
+            if (!selectedName) return;
+
+            const matchedPackage = packagesData.find(p => p.name === selectedName);
+            if (!matchedPackage || !matchedPackage.components) return;
+
+            const priceInput = document.getElementById('new-book-price');
+            if (priceInput && (!priceInput.value || priceInput.value == 0)) {
+                priceInput.value = matchedPackage.price;
+                calculateTotalTagihan();
+            }
+
+            container.innerHTML = matchedPackage.components.map(comp => 
+                createBookingCustomComponentRowHtml(comp.name, comp.qty, comp.unit)
+            ).join('');
         }
 
         function renderBookingsTable() {
@@ -789,8 +1126,12 @@
             const endDateVal = document.getElementById('filter-end-date')?.value || '';
 
             const filtered = bookingsData.filter(item => {
-                const matchSearch = !searchVal || item.client.toLowerCase().includes(searchVal) || item.id.toLowerCase().includes(searchVal) || item.venue.toLowerCase().includes(searchVal);
-                const matchStatus = !selectedStatus || item.status === selectedStatus;
+                const matchSearch = searchVal === '' || 
+                    item.client.toLowerCase().includes(searchVal) ||
+                    item.id.toLowerCase().includes(searchVal) ||
+                    item.venue.toLowerCase().includes(searchVal);
+
+                const matchStatus = selectedStatus === '' || item.status === selectedStatus;
                 
                 let matchDate = true;
                 if (beginDateVal && endDateVal) {
@@ -800,14 +1141,22 @@
             });
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 text-xs">No orders match the current filter.</td></tr>`;
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-slate-400 text-xs">
+                            <i class="fa-solid fa-calendar-xmark text-2xl mb-2 block"></i>
+                            No order data matching current filters.
+                        </td>
+                    </tr>
+                `;
                 return;
             }
 
             tbody.innerHTML = filtered.map(item => {
                 const style = statusStyles[item.status] || statusStyles['Draft'];
+
                 return `
-                    <tr class="hover:bg-slate-50 transition-colors">
+                    <tr class="hover:bg-slate-50/80 transition-colors">
                         <td class="p-4">
                             <div class="font-bold text-slate-900">${item.client}</div>
                             <div class="text-xs text-slate-400">ID: ${item.id} • ${item.phone}</div>
@@ -816,13 +1165,21 @@
                         <td class="p-4 text-slate-600 text-xs">${item.venue}</td>
                         <td class="p-4 text-xs font-semibold text-slate-800">${item.package}</td>
                         <td class="p-4 text-center">
-                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold ${style.bg} ${style.text}">${item.status}</span>
+                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold ${style.bg} ${style.text}">
+                                ${item.status}
+                            </span>
                         </td>
                         <td class="p-4 text-center">
                             <div class="flex items-center justify-center space-x-1.5">
-                                <button onclick="openDetailModal('${item.id}')" class="p-1.5 text-slate-600 hover:bg-slate-100 rounded-lg text-xs"><i class="fa-solid fa-eye"></i></button>
-                                <button onclick="openEditBookingModal('${item.id}')" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg text-xs"><i class="fa-solid fa-pen-to-square"></i></button>
-                                <button onclick="confirmDeleteBooking('${item.id}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg text-xs"><i class="fa-solid fa-trash-can"></i></button>
+                                <button onclick="openDetailModal('${item.id}')" class="p-1.5 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-medium transition-colors" title="View Details">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button onclick="openEditBookingModal('${item.id}')" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg text-xs font-medium transition-colors" title="Edit Order">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button onclick="confirmDeleteBooking('${item.id}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg text-xs font-medium transition-colors" title="Delete Order">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -830,77 +1187,17 @@
             }).join('');
         }
 
-        function filterBookingsTable() { renderBookingsTable(); }
+        function filterBookingsTable() {
+            renderBookingsTable();
+        }
+
         function resetBookingFilters() {
-            if (document.getElementById('order-search')) document.getElementById('order-search').value = '';
+            const searchInput = document.getElementById('order-search');
+            if (searchInput) searchInput.value = '';
             document.getElementById('filter-status').value = '';
             document.getElementById('filter-begin-date').value = '';
             document.getElementById('filter-end-date').value = '';
             renderBookingsTable();
-        }
-
-        function populatePackageOptions() {
-            const select = document.getElementById('new-book-package');
-            if (select) {
-                select.innerHTML = `<option value="">-- Select Decor Package --</option>` + packagesData.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
-            }
-        }
-
-        function calculateTotalTagihan() {
-            const price = parseInt(document.getElementById('new-book-price')?.value) || 0;
-            const dp = parseInt(document.getElementById('new-book-dp')?.value) || 0;
-            document.getElementById('new-book-total-tagihan').value = Math.max(0, price - dp);
-        }
-
-        function createBookingCustomComponentRowHtml(selectedName = '', qty = 1, unitVal = '') {
-            const rowId = 'book-comp-row-' + Math.random().toString(36).substr(2, 9);
-            return `
-                <div class="flex gap-2 items-center booking-comp-row-item" id="${rowId}">
-                    <input type="text" value="${selectedName}" placeholder="Component Name..." required class="book-comp-name flex-1 px-3 py-2 bg-slate-50 border rounded-xl text-xs">
-                    <input type="number" min="1" value="${qty}" required class="book-comp-qty w-20 px-3 py-2 bg-slate-50 border rounded-xl font-bold text-center text-xs">
-                    <input type="text" value="${unitVal || 'Pcs'}" class="book-comp-unit w-24 px-3 py-2 bg-slate-200 border rounded-xl text-center text-xs">
-                    <button type="button" onclick="removeBookingCustomComponentRow('${rowId}')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
-                </div>
-            `;
-        }
-
-        function addBookingCustomComponentRow(name = '', qty = 1, unit = '') {
-            document.getElementById('booking-components-container').insertAdjacentHTML('beforeend', createBookingCustomComponentRowHtml(name, qty, unit));
-        }
-        function removeBookingCustomComponentRow(id) { const el = document.getElementById(id); if (el) el.remove(); }
-
-        function createAdditionalRowHtml(name = '', qty = 1, unit = 'Pcs') {
-            const rowId = 'add-row-' + Math.random().toString(36).substr(2, 9);
-            return `
-                <div class="flex gap-2 items-center additional-row-item" id="${rowId}">
-                    <input type="text" value="${name}" placeholder="Additional Item Name..." required class="add-comp-name flex-1 px-3 py-2 bg-slate-50 border rounded-xl text-xs">
-                    <input type="number" min="1" value="${qty}" required class="add-comp-qty w-20 px-3 py-2 bg-slate-50 border rounded-xl font-bold text-center text-xs">
-                    <input type="text" value="${unit}" required class="add-comp-unit w-28 px-3 py-2 bg-slate-50 border rounded-xl text-xs text-center">
-                    <button type="button" onclick="removeAdditionalRow('${rowId}')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
-                </div>
-            `;
-        }
-
-        function addAdditionalRowInput(name = '', qty = 1, unit = 'Pcs') {
-            document.getElementById('additional-rows-container').insertAdjacentHTML('beforeend', createAdditionalRowHtml(name, qty, unit));
-        }
-        function removeAdditionalRow(id) { const el = document.getElementById(id); if (el) el.remove(); }
-
-        function onBookingPackageChange() {
-            const selectedName = document.getElementById('new-book-package').value;
-            const container = document.getElementById('booking-components-container');
-            if (!selectedName) return;
-
-            const matched = packagesData.find(p => p.name === selectedName);
-            if (!matched) return;
-
-            const priceInput = document.getElementById('new-book-price');
-            if (priceInput && (!priceInput.value || priceInput.value == 0)) {
-                priceInput.value = matched.price;
-                calculateTotalTagihan();
-            }
-
-            container.innerHTML = (matched.components || []).map(c => createBookingCustomComponentRowHtml(c.name, c.qty, c.unit)).join('');
         }
 
         function openBookingModal() {
@@ -916,15 +1213,17 @@
             document.getElementById('new-book-dp').value = '';
             document.getElementById('new-book-total-tagihan').value = '0';
             document.getElementById('new-book-transport').value = '';
+            
             document.getElementById('booking-components-container').innerHTML = '';
             document.getElementById('additional-rows-container').innerHTML = '';
             document.getElementById('booking-status-field-container').classList.add('hidden');
+
             document.getElementById('modal-booking').classList.remove('hidden');
         }
 
-        function openEditBookingModal(id) {
+        function openEditBookingModal(bookingId) {
             populatePackageOptions();
-            const item = bookingsData.find(b => b.id === id);
+            const item = bookingsData.find(b => b.id === bookingId);
             if (!item) return;
 
             document.getElementById('booking-modal-title').innerText = `Edit Order ${item.id}`;
@@ -934,19 +1233,34 @@
             document.getElementById('new-book-date').value = item.date;
             document.getElementById('new-book-package').value = item.package;
             document.getElementById('new-book-venue').value = item.venue;
+            
             document.getElementById('new-book-price').value = item.price || 0;
             document.getElementById('new-book-dp').value = item.dp || 0;
             document.getElementById('new-book-transport').value = item.transport || '';
+            
             calculateTotalTagihan();
 
-            document.getElementById('new-book-status').value = item.status;
+            const statusSelect = document.getElementById('new-book-status');
+            statusSelect.value = item.status;
             document.getElementById('booking-status-field-container').classList.remove('hidden');
 
             const compContainer = document.getElementById('booking-components-container');
-            compContainer.innerHTML = (item.customComponents || []).map(c => createBookingCustomComponentRowHtml(c.name, c.qty, c.unit)).join('');
+            compContainer.innerHTML = '';
+            if (item.customComponents && item.customComponents.length > 0) {
+                item.customComponents.forEach(comp => {
+                    compContainer.insertAdjacentHTML('beforeend', createBookingCustomComponentRowHtml(comp.name, comp.qty, comp.unit));
+                });
+            } else {
+                onBookingPackageChange();
+            }
 
             const addContainer = document.getElementById('additional-rows-container');
-            addContainer.innerHTML = (item.additional || []).map(a => createAdditionalRowHtml(a.name, a.qty, a.unit)).join('');
+            addContainer.innerHTML = '';
+            if (item.additional && item.additional.length > 0) {
+                item.additional.forEach(add => {
+                    addAdditionalRowInput(add.name, add.qty, add.unit);
+                });
+            }
 
             document.getElementById('modal-booking').classList.remove('hidden');
         }
@@ -959,70 +1273,89 @@
             const dateStr = document.getElementById('new-book-date').value;
             const pkg = document.getElementById('new-book-package').value;
             const venue = document.getElementById('new-book-venue').value;
+            
             const price = parseInt(document.getElementById('new-book-price').value) || 0;
             const dp = parseInt(document.getElementById('new-book-dp').value) || 0;
             const totalTagihan = Math.max(0, price - dp);
             const transport = document.getElementById('new-book-transport').value;
 
-            const customComponents = Array.from(document.querySelectorAll('#booking-components-container .booking-comp-row-item')).map(row => ({
-                name: row.querySelector('.book-comp-name').value,
-                qty: parseInt(row.querySelector('.book-comp-qty').value) || 1,
-                unit: row.querySelector('.book-comp-unit').value || 'Pcs'
-            }));
+            const compRows = document.querySelectorAll('#booking-components-container .booking-comp-row-item');
+            const customComponents = [];
+            compRows.forEach(row => {
+                const cName = row.querySelector('.book-comp-name')?.value;
+                const cQty = parseInt(row.querySelector('.book-comp-qty')?.value) || 1;
+                const cUnit = row.querySelector('.book-comp-unit')?.value || 'Pcs';
+                if (cName) customComponents.push({ name: cName, qty: cQty, unit: cUnit });
+            });
 
-            const additional = Array.from(document.querySelectorAll('#additional-rows-container .additional-row-item')).map(row => ({
-                name: row.querySelector('.add-comp-name').value,
-                qty: parseInt(row.querySelector('.add-comp-qty').value) || 1,
-                unit: row.querySelector('.add-comp-unit').value || 'Pcs'
-            }));
+            const addRows = document.querySelectorAll('#additional-rows-container .additional-row-item');
+            const additional = [];
+            addRows.forEach(row => {
+                const addName = row.querySelector('.add-comp-name')?.value;
+                const addQty = parseInt(row.querySelector('.add-comp-qty')?.value) || 1;
+                const addUnit = row.querySelector('.add-comp-unit')?.value || 'Pcs';
+                if (addName) additional.push({ name: addName, qty: addQty, unit: addUnit });
+            });
 
             const dateObj = new Date(dateStr);
-            const formattedDate = dateObj.toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' });
+            const options = { day: '2-digit', month: 'long', year: 'numeric' };
+            const formattedDate = dateObj.toLocaleDateString('en-US', options);
 
             if (editId) {
-                const status = document.getElementById('new-book-status').value;
-                const { error } = await db.from('bookings').update({
-                    client, phone, date: dateStr, formatted_date: formattedDate, package: pkg, venue, price, dp, total_tagihan: totalTagihan, transport, custom_components: customComponents, additional, status
+                const updatedStatus = document.getElementById('new-book-status').value;
+                const { error } = await supabase.from('bookings').update({
+                    client, phone, date: dateStr, formatted_date: formattedDate, package: pkg, venue, price, dp, total_tagihan: totalTagihan, transport, custom_components: customComponents, additional, status: updatedStatus
                 }).eq('id', editId);
 
                 if (!error) {
-                    showToast(`Order ${editId} updated!`);
+                    showToast(`Order "${editId}" updated successfully!`);
+                    await fetchAllData();
                     closeModal('modal-booking');
-                    await fetchAllDataFromSupabase();
-                } else { alert(error.message); }
+                } else {
+                    showToast("Failed to update order in database");
+                }
             } else {
-                const newId = 'BK-00' + (bookingsData.length + 1);
-                const { error } = await db.from('bookings').insert([{
+                const newId = 'BK-' + String(bookingsData.length + 1).padStart(3, '0');
+                const { error } = await supabase.from('bookings').insert([{
                     id: newId, client, phone, date: dateStr, formatted_date: formattedDate, venue, package: pkg, price, dp, total_tagihan: totalTagihan, transport, custom_components: customComponents, additional, status: 'Draft'
                 }]);
 
                 if (!error) {
-                    showToast('New booking added to Supabase!');
+                    showToast('New booking created successfully!');
+                    await fetchAllData();
                     closeModal('modal-booking');
-                    await fetchAllDataFromSupabase();
-                } else { alert(error.message); }
+                } else {
+                    showToast("Failed to save new order");
+                }
             }
         }
 
-        function confirmDeleteBooking(id) {
-            bookingToDeleteId = id;
-            document.getElementById('delete-booking-client').innerText = id;
+        function confirmDeleteBooking(bookingId) {
+            const item = bookingsData.find(b => b.id === bookingId);
+            if (!item) return;
+
+            bookingToDeleteId = bookingId;
+            document.getElementById('delete-booking-client').innerText = `${item.client} (${item.id})`;
             document.getElementById('btn-confirm-delete-booking').onclick = executeDeleteBooking;
             document.getElementById('modal-delete-booking-confirm').classList.remove('hidden');
         }
 
         async function executeDeleteBooking() {
             if (!bookingToDeleteId) return;
-            const { error } = await db.from('bookings').delete().eq('id', bookingToDeleteId);
+
+            const { error } = await supabase.from('bookings').delete().eq('id', bookingToDeleteId);
             if (!error) {
-                showToast('Order deleted!');
+                bookingToDeleteId = null;
+                showToast('Order successfully deleted!');
+                await fetchAllData();
                 closeModal('modal-delete-booking-confirm');
-                await fetchAllDataFromSupabase();
+            } else {
+                showToast('Failed to delete order');
             }
         }
 
-        function openDetailModal(id) {
-            const item = bookingsData.find(b => b.id === id);
+        function openDetailModal(bookingCode) {
+            const item = bookingsData.find(b => b.id === bookingCode);
             if (!item) return;
 
             document.getElementById('modal-client-name').innerText = item.client;
@@ -1030,11 +1363,16 @@
             document.getElementById('modal-date').innerText = item.formattedDate || item.date;
             document.getElementById('modal-package').innerText = item.package;
             document.getElementById('modal-venue').innerText = item.venue;
+            
+            const priceVal = item.price || 0;
+            const dpVal = item.dp || 0;
+            const totalTagihanVal = item.totalTagihan !== undefined ? item.totalTagihan : Math.max(0, priceVal - dpVal);
 
-            document.getElementById('modal-price-val').innerText = `Rp ${item.price.toLocaleString('en-US')}`;
-            document.getElementById('modal-dp-val').innerText = `Rp ${item.dp.toLocaleString('en-US')}`;
-            document.getElementById('modal-total-tagihan-val').innerText = `Rp ${item.totalTagihan.toLocaleString('en-US')}`;
-            document.getElementById('modal-transport-val').innerText = item.transport || 'Not Specified';
+            document.getElementById('modal-price-val').innerText = `Rp ${priceVal.toLocaleString('en-US')}`;
+            document.getElementById('modal-dp-val').innerText = `Rp ${dpVal.toLocaleString('en-US')}`;
+            document.getElementById('modal-total-tagihan-val').innerText = `Rp ${totalTagihanVal.toLocaleString('en-US')}`;
+
+            document.getElementById('modal-transport-val').innerText = item.transport ? item.transport : 'Not Specified';
 
             const badge = document.getElementById('modal-status-badge');
             const style = statusStyles[item.status] || statusStyles['Draft'];
@@ -1042,18 +1380,30 @@
             badge.className = `inline-block px-2.5 py-0.5 rounded-full font-bold text-[10px] mt-0.5 ${style.bg} ${style.text}`;
 
             const tbody = document.getElementById('modal-components-tbody');
-            if (item.customComponents && item.customComponents.length > 0) {
-                tbody.innerHTML = item.customComponents.map(c => `
-                    <tr><td class="p-3 font-medium text-slate-800">${c.name}</td><td class="p-3 text-center font-bold">${c.qty}</td><td class="p-3 text-center text-slate-600">${c.unit}</td></tr>
+            const activeComponents = (item.customComponents && item.customComponents.length > 0) 
+                ? item.customComponents 
+                : (packagesData.find(p => p.name === item.package)?.components || []);
+
+            if (activeComponents.length > 0) {
+                tbody.innerHTML = activeComponents.map(comp => `
+                    <tr>
+                        <td class="p-3 font-medium text-slate-800">${comp.name}</td>
+                        <td class="p-3 text-center font-bold text-slate-700">${comp.qty}</td>
+                        <td class="p-3 text-center text-slate-600">${comp.unit || 'Pcs'}</td>
+                    </tr>
                 `).join('');
             } else {
-                tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400">No components recorded.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400">No main components recorded for this order.</td></tr>`;
             }
 
             const addTbody = document.getElementById('modal-additional-tbody');
             if (item.additional && item.additional.length > 0) {
-                addTbody.innerHTML = item.additional.map(a => `
-                    <tr><td class="p-3 font-medium text-slate-800">${a.name}</td><td class="p-3 text-center font-bold">${a.qty}</td><td class="p-3 text-center text-slate-600">${a.unit}</td></tr>
+                addTbody.innerHTML = item.additional.map(add => `
+                    <tr>
+                        <td class="p-3 font-medium text-slate-800">${add.name}</td>
+                        <td class="p-3 text-center font-bold text-slate-700">${add.qty}</td>
+                        <td class="p-3 text-center text-slate-600">${add.unit}</td>
+                    </tr>
                 `).join('');
             } else {
                 addTbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400">No additional items.</td></tr>`;
@@ -1064,56 +1414,205 @@
 
         function renderPackagesGrid() {
             const grid = document.getElementById('packages-grid');
+            if (!grid) return;
+
             if (packagesData.length === 0) {
-                grid.innerHTML = `<div class="col-span-3 p-8 text-center text-slate-400">No decor packages available.</div>`;
+                grid.innerHTML = `
+                    <div class="col-span-3 p-12 text-center text-slate-400 bg-white rounded-2xl border border-slate-100">
+                        <i class="fa-solid fa-wand-magic-sparkles text-3xl mb-2 block"></i>
+                        No decor packages available. Click "Create New Package" to add one.
+                    </div>
+                `;
                 return;
             }
 
-            grid.innerHTML = packagesData.map(pkg => `
-                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <div>
-                        <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-3">
-                            <h4 class="font-serif-title font-bold text-lg text-slate-900">${pkg.name}</h4>
-                            <span class="bg-roseGold-50 text-roseGold-700 font-bold text-xs px-3 py-1 rounded-full shrink-0 ml-2">Rp ${pkg.price.toLocaleString('en-US')}</span>
+            grid.innerHTML = packagesData.map(pkg => {
+                const comps = pkg.components || [];
+                const max5Components = comps.slice(0, 5);
+                const remainingCount = comps.length - 5;
+                const totalQty = comps.reduce((sum, item) => sum + (parseInt(item.qty) || 0), 0);
+
+                return `
+                    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col justify-between hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="flex justify-between items-start border-b border-slate-100 pb-3 mb-3">
+                                <h4 class="font-serif-title font-bold text-lg text-slate-900">${pkg.name}</h4>
+                                <span class="bg-roseGold-50 text-roseGold-700 font-bold text-xs px-3 py-1 rounded-full shrink-0 ml-2">
+                                    Rp ${Number(pkg.price).toLocaleString('en-US')}
+                                </span>
+                            </div>
+                            ${pkg.description ? `<p class="text-xs text-slate-500 mb-4 line-clamp-2">${pkg.description}</p>` : ''}
+                            
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Main Components (BOM):</p>
+                                    <span class="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded">${comps.length} Types (${totalQty} Items)</span>
+                                </div>
+                                <ul class="text-xs text-slate-600 space-y-1.5 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                    ${max5Components.map(comp => `
+                                        <li class="flex items-center justify-between">
+                                            <span class="truncate pr-2"><i class="fa-solid fa-check text-roseGold-500 mr-2"></i> ${comp.name}</span>
+                                            <span class="font-bold text-slate-800 shrink-0">${comp.qty} ${comp.unit || ''}</span>
+                                        </li>
+                                    `).join('')}
+
+                                    ${remainingCount > 0 ? `
+                                        <li class="pt-1.5 border-t border-slate-200 text-center text-[11px] text-roseGold-600 font-semibold">
+                                            + ${remainingCount} other component types
+                                        </li>
+                                    ` : ''}
+                                </ul>
+                            </div>
                         </div>
-                        <p class="text-xs text-slate-500 mb-4">${pkg.description || ''}</p>
-                        <ul class="text-xs text-slate-600 space-y-1 bg-slate-50 p-3 rounded-xl">
-                            ${(pkg.components || []).map(c => `
-                                <li class="flex items-center justify-between"><span class="truncate"><i class="fa-solid fa-check text-roseGold-500 mr-2"></i>${c.name}</span><span class="font-bold">${c.qty}${c.unit||''}</span></li>
-                            `).join('')}
-                        </ul>
+                        <div class="pt-5 space-y-2">
+                            <button onclick="openViewDetailPackageModal(${pkg.id})" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition-colors flex items-center justify-center">
+                                <i class="fa-solid fa-eye mr-1.5"></i> View Details
+                            </button>
+                            <div class="flex gap-2">
+                                <button onclick="openEditPackageFullModal(${pkg.id})" class="flex-1 py-2 bg-roseGold-50 hover:bg-roseGold-100 text-roseGold-600 font-semibold rounded-xl text-xs transition-colors flex items-center justify-center">
+                                    <i class="fa-solid fa-pen-to-square mr-1.5"></i> Edit Package
+                                </button>
+                                <button onclick="confirmDeletePackage(${pkg.id})" class="py-2 px-3 bg-red-50 hover:bg-red-100 text-red-600 font-semibold rounded-xl text-xs transition-colors flex items-center justify-center" title="Delete Package">
+                                    <i class="fa-solid fa-trash-can mr-1"></i> Delete
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="pt-5 flex gap-2">
-                        <button onclick="openEditPackageFullModal(${pkg.id})" class="flex-1 py-2 bg-roseGold-50 text-roseGold-600 font-semibold rounded-xl text-xs"><i class="fa-solid fa-pen-to-square mr-1"></i> Edit</button>
-                        <button onclick="confirmDeletePackage(${pkg.id})" class="py-2 px-3 bg-red-50 text-red-600 font-semibold rounded-xl text-xs"><i class="fa-solid fa-trash-can"></i></button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
-        function createBomRowHtml(selectedName = '', qty = 1, unitVal = '') {
+        function createBomRowHtml(selectedName = '', qty = 1, unitVal = '', isReadOnly = false, containerId = '') {
             const rowId = 'bom-row-' + Math.random().toString(36).substr(2, 9);
+            const defaultItem = inventoryData.find(i => i.name === selectedName) || inventoryData[0];
+            const initialUnit = unitVal || (defaultItem ? defaultItem.unit : 'Pcs');
+
+            const disabledAttr = isReadOnly ? 'disabled readonly cursor-not-allowed' : '';
+
             return `
                 <div class="flex gap-2 items-center bom-row-item" id="${rowId}">
-                    <input type="text" value="${selectedName}" placeholder="Component Name..." required class="bom-comp-name flex-1 px-3 py-2 bg-slate-50 border rounded-xl text-xs">
-                    <input type="number" min="1" value="${qty}" required class="bom-comp-qty w-20 px-3 py-2 bg-slate-50 border rounded-xl font-bold text-center text-xs">
-                    <input type="text" value="${unitVal || 'Pcs'}" class="bom-comp-unit w-20 px-3 py-2 bg-slate-200 border rounded-xl text-center text-xs">
-                    <button type="button" onclick="removeBomRow('${rowId}')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
+                    <div class="relative flex-1">
+                        <div class="relative">
+                            <input type="text" value="${selectedName || (defaultItem ? defaultItem.name : '')}" 
+                                placeholder="Search / Select Component..." 
+                                ${!isReadOnly ? `onfocus="showDropdownOptions('${rowId}')" oninput="filterDropdownOptions('${rowId}', this.value)"` : ''} 
+                                ${disabledAttr} 
+                                required 
+                                class="bom-comp-name w-full px-3 py-2 ${isReadOnly ? 'bg-slate-200 text-slate-600' : 'bg-slate-50'} border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 text-xs font-medium">
+                            ${!isReadOnly ? `<i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>` : ''}
+                        </div>
+                        
+                        ${!isReadOnly ? `
+                            <div class="dropdown-options hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-30 max-h-40 overflow-y-auto divide-y divide-slate-100">
+                                ${inventoryData.map(item => `
+                                    <div onclick="selectBomComponent('${rowId}', '${item.name.replace(/'/g, "\\'")}', '${item.unit}', '${containerId}')" 
+                                         class="p-2.5 hover:bg-roseGold-50 cursor-pointer flex justify-between items-center text-xs">
+                                        <span class="font-bold text-slate-800">${item.name}</span>
+                                        <span class="text-[10px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded">${item.unit}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <input type="number" min="1" value="${qty}" ${disabledAttr} oninput="calculateBomSummary('${containerId}')" placeholder="Qty" required class="bom-comp-qty w-20 px-3 py-2 ${isReadOnly ? 'bg-slate-200 text-slate-600' : 'bg-slate-50'} border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 font-bold text-center text-xs">
+                    <input type="text" value="${initialUnit}" readonly disabled class="bom-comp-unit w-20 px-3 py-2 bg-slate-200 text-slate-500 font-semibold border border-slate-200 rounded-xl text-center cursor-not-allowed text-xs">
+
+                    ${!isReadOnly ? `
+                        <button type="button" onclick="removeBomRow('${rowId}', '${containerId}')" class="text-rose-500 hover:text-rose-700 p-1.5 rounded-lg hover:bg-rose-50 transition-colors">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    ` : ''}
                 </div>
             `;
         }
 
-        function addBomRowInput(containerId) {
-            document.getElementById(containerId).insertAdjacentHTML('beforeend', createBomRowHtml());
+        function calculateBomSummary(containerId) {
+            if (!containerId) return;
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const rows = container.querySelectorAll('.bom-row-item');
+            const totalTypes = rows.length;
+            let totalQty = 0;
+
+            rows.forEach(row => {
+                const qtyVal = parseInt(row.querySelector('.bom-comp-qty')?.value) || 0;
+                totalQty += qtyVal;
+            });
+
+            if (containerId === 'bom-rows-container') {
+                document.getElementById('create-summary-types').innerText = totalTypes;
+                document.getElementById('create-summary-qty').innerText = totalQty;
+            } else if (containerId === 'edit-bom-container') {
+                document.getElementById('edit-summary-types').innerText = totalTypes;
+                document.getElementById('edit-summary-qty').innerText = totalQty;
+            }
         }
-        function removeBomRow(id) { const el = document.getElementById(id); if (el) el.remove(); }
+
+        function showDropdownOptions(rowId) {
+            document.querySelectorAll('.dropdown-options').forEach(el => el.classList.add('hidden'));
+            const row = document.getElementById(rowId);
+            if (row) {
+                row.querySelector('.dropdown-options')?.classList.remove('hidden');
+            }
+        }
+
+        function filterDropdownOptions(rowId, query) {
+            const row = document.getElementById(rowId);
+            if (!row) return;
+            const optionsBox = row.querySelector('.dropdown-options');
+            if (optionsBox) {
+                optionsBox.classList.remove('hidden');
+                const items = optionsBox.querySelectorAll('div');
+                items.forEach(item => {
+                    const text = item.innerText.toLowerCase();
+                    item.style.display = text.includes(query.toLowerCase()) ? 'flex' : 'none';
+                });
+            }
+        }
+
+        function selectBomComponent(rowId, name, unit, containerId) {
+            const row = document.getElementById(rowId);
+            if (!row) return;
+            row.querySelector('.bom-comp-name').value = name;
+            row.querySelector('.bom-comp-unit').value = unit;
+            row.querySelector('.dropdown-options').classList.add('hidden');
+            calculateBomSummary(containerId);
+        }
+
+        function removeBomRow(rowId, containerId) {
+            const row = document.getElementById(rowId);
+            if (row) {
+                row.remove();
+                calculateBomSummary(containerId);
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.relative')) {
+                document.querySelectorAll('.dropdown-options').forEach(el => el.classList.add('hidden'));
+            }
+        });
 
         function openNewPackageModal() {
             document.getElementById('pkg-name').value = '';
             document.getElementById('pkg-price').value = '';
             document.getElementById('pkg-desc').value = '';
-            document.getElementById('bom-rows-container').innerHTML = createBomRowHtml();
+            
+            const container = document.getElementById('bom-rows-container');
+            const defaultItem = inventoryData[0];
+            container.innerHTML = createBomRowHtml(defaultItem ? defaultItem.name : '', 1, defaultItem ? defaultItem.unit : 'Pcs', false, 'bom-rows-container');
+
+            calculateBomSummary('bom-rows-container');
             document.getElementById('modal-package-form').classList.remove('hidden');
+        }
+
+        function addBomRowInput(containerId) {
+            const container = document.getElementById(containerId);
+            const defaultItem = inventoryData[0];
+            container.insertAdjacentHTML('beforeend', createBomRowHtml(defaultItem ? defaultItem.name : '', 1, defaultItem ? defaultItem.unit : 'Pcs', false, containerId));
+            calculateBomSummary(containerId);
         }
 
         async function handlePackageSubmit(e) {
@@ -1122,30 +1621,97 @@
             const price = parseInt(document.getElementById('pkg-price').value) || 0;
             const description = document.getElementById('pkg-desc').value;
 
-            const components = Array.from(document.querySelectorAll('#bom-rows-container .bom-row-item')).map(row => ({
-                name: row.querySelector('.bom-comp-name').value,
-                qty: parseInt(row.querySelector('.bom-comp-qty').value) || 1,
-                unit: row.querySelector('.bom-comp-unit').value || 'Pcs'
-            }));
+            const rows = document.querySelectorAll('#bom-rows-container .bom-row-item');
+            const components = [];
+            rows.forEach(row => {
+                const compName = row.querySelector('.bom-comp-name').value;
+                const qty = parseInt(row.querySelector('.bom-comp-qty').value) || 1;
+                const unit = row.querySelector('.bom-comp-unit').value;
+                if (compName) components.push({ name: compName, qty, unit });
+            });
 
-            const { error } = await db.from('packages').insert([{ name, price, description, components }]);
+            const { error } = await supabase.from('packages').insert([{
+                name, price, description, components
+            }]);
+
             if (!error) {
-                showToast(`Package "${name}" created!`);
+                showToast(`Package "${name}" created successfully!`);
+                await fetchAllData();
+                populatePackageOptions();
                 closeModal('modal-package-form');
-                await fetchAllDataFromSupabase();
-            } else { alert(error.message); }
+            } else {
+                showToast('Failed to create new package');
+            }
         }
 
-        function openEditPackageFullModal(id) {
-            const pkg = packagesData.find(p => p.id === id);
+        function openViewDetailPackageModal(packageId) {
+            const pkg = packagesData.find(p => p.id === packageId);
+            if (!pkg) return;
+
+            document.getElementById('edit-bom-badge').innerText = "View Only";
+            document.getElementById('edit-bom-title').innerText = `Package Details: ${pkg.name}`;
+
+            const nameInput = document.getElementById('edit-pkg-name');
+            const priceInput = document.getElementById('edit-pkg-price');
+            const descInput = document.getElementById('edit-pkg-desc');
+
+            nameInput.value = pkg.name;
+            priceInput.value = pkg.price;
+            descInput.value = pkg.description || '';
+
+            nameInput.disabled = true;
+            priceInput.disabled = true;
+            descInput.disabled = true;
+            nameInput.classList.add('bg-slate-200', 'cursor-not-allowed');
+            priceInput.classList.add('bg-slate-200', 'cursor-not-allowed');
+            descInput.classList.add('bg-slate-200', 'cursor-not-allowed');
+
+            document.getElementById('btn-add-edit-bom-row').classList.add('hidden');
+            document.getElementById('btn-save-pkg-modal').classList.add('hidden');
+
+            const container = document.getElementById('edit-bom-container');
+            const comps = pkg.components || [];
+            container.innerHTML = comps.map(comp => 
+                createBomRowHtml(comp.name, comp.qty, comp.unit, true, 'edit-bom-container')
+            ).join('');
+
+            calculateBomSummary('edit-bom-container');
+            document.getElementById('modal-edit-package-bom').classList.remove('hidden');
+        }
+
+        function openEditPackageFullModal(packageId) {
+            const pkg = packagesData.find(p => p.id === packageId);
             if (!pkg) return;
 
             document.getElementById('edit-pkg-id').value = pkg.id;
-            document.getElementById('edit-pkg-name').value = pkg.name;
-            document.getElementById('edit-pkg-price').value = pkg.price;
-            document.getElementById('edit-pkg-desc').value = pkg.description || '';
+            document.getElementById('edit-bom-badge').innerText = "Package Editor";
+            document.getElementById('edit-bom-title').innerText = `Edit Decor Package`;
 
-            document.getElementById('edit-bom-container').innerHTML = (pkg.components || []).map(c => createBomRowHtml(c.name, c.qty, c.unit)).join('');
+            const nameInput = document.getElementById('edit-pkg-name');
+            const priceInput = document.getElementById('edit-pkg-price');
+            const descInput = document.getElementById('edit-pkg-desc');
+
+            nameInput.value = pkg.name;
+            priceInput.value = pkg.price;
+            descInput.value = pkg.description || '';
+
+            nameInput.disabled = false;
+            priceInput.disabled = false;
+            descInput.disabled = false;
+            nameInput.classList.remove('bg-slate-200', 'cursor-not-allowed');
+            priceInput.classList.remove('bg-slate-200', 'cursor-not-allowed');
+            descInput.classList.remove('bg-slate-200', 'cursor-not-allowed');
+
+            document.getElementById('btn-add-edit-bom-row').classList.remove('hidden');
+            document.getElementById('btn-save-pkg-modal').classList.remove('hidden');
+
+            const container = document.getElementById('edit-bom-container');
+            const comps = pkg.components || [];
+            container.innerHTML = comps.map(comp => 
+                createBomRowHtml(comp.name, comp.qty, comp.unit, false, 'edit-bom-container')
+            ).join('');
+
+            calculateBomSummary('edit-bom-container');
             document.getElementById('modal-edit-package-bom').classList.remove('hidden');
         }
 
@@ -1156,34 +1722,51 @@
             const price = parseInt(document.getElementById('edit-pkg-price').value) || 0;
             const description = document.getElementById('edit-pkg-desc').value;
 
-            const components = Array.from(document.querySelectorAll('#edit-bom-container .bom-row-item')).map(row => ({
-                name: row.querySelector('.bom-comp-name').value,
-                qty: parseInt(row.querySelector('.bom-comp-qty').value) || 1,
-                unit: row.querySelector('.bom-comp-unit').value || 'Pcs'
-            }));
+            const rows = document.querySelectorAll('#edit-bom-container .bom-row-item');
+            const components = [];
+            rows.forEach(row => {
+                const compName = row.querySelector('.bom-comp-name').value;
+                const qty = parseInt(row.querySelector('.bom-comp-qty').value) || 1;
+                const unit = row.querySelector('.bom-comp-unit').value;
+                if (compName) components.push({ name: compName, qty, unit });
+            });
 
-            const { error } = await db.from('packages').update({ name, price, description, components }).eq('id', pkgId);
+            const { error } = await supabase.from('packages').update({
+                name, price, description, components
+            }).eq('id', pkgId);
+
             if (!error) {
-                showToast(`Package updated!`);
+                showToast(`Package "${name}" updated successfully!`);
+                await fetchAllData();
+                populatePackageOptions();
                 closeModal('modal-edit-package-bom');
-                await fetchAllDataFromSupabase();
-            } else { alert(error.message); }
+            } else {
+                showToast('Failed to update package');
+            }
         }
 
-        function confirmDeletePackage(id) {
-            pkgToDeleteId = id;
-            document.getElementById('delete-pkg-name').innerText = id;
+        function confirmDeletePackage(packageId) {
+            const pkg = packagesData.find(p => p.id === packageId);
+            if (!pkg) return;
+
+            pkgToDeleteId = packageId;
+            document.getElementById('delete-pkg-name').innerText = pkg.name;
             document.getElementById('btn-confirm-delete-pkg').onclick = executeDeletePackage;
             document.getElementById('modal-delete-pkg-confirm').classList.remove('hidden');
         }
 
         async function executeDeletePackage() {
             if (!pkgToDeleteId) return;
-            const { error } = await db.from('packages').delete().eq('id', pkgToDeleteId);
+
+            const { error } = await supabase.from('packages').delete().eq('id', pkgToDeleteId);
             if (!error) {
-                showToast('Package deleted!');
+                pkgToDeleteId = null;
+                showToast('Package deleted from catalog!');
+                await fetchAllData();
+                populatePackageOptions();
                 closeModal('modal-delete-pkg-confirm');
-                await fetchAllDataFromSupabase();
+            } else {
+                showToast('Failed to delete package');
             }
         }
 
@@ -1192,32 +1775,45 @@
             const searchVal = (document.getElementById('inventory-search')?.value || '').toLowerCase();
             const categoryVal = document.getElementById('inventory-filter-category')?.value || '';
 
-            const filtered = inventoryData.filter(i => {
-                const matchSearch = i.name.toLowerCase().includes(searchVal);
-                const matchCategory = !categoryVal || i.category === categoryVal;
+            const filtered = inventoryData.filter(item => {
+                const matchSearch = item.name.toLowerCase().includes(searchVal);
+                const matchCategory = categoryVal === '' || item.category === categoryVal;
                 return matchSearch && matchCategory;
             });
 
             document.getElementById('inventory-count').innerText = `${filtered.length} Types`;
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 text-xs">No component items found.</td></tr>`;
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-slate-400 text-xs">
+                            <i class="fa-solid fa-box-open text-2xl mb-2 block"></i>
+                            No decor components found.
+                        </td>
+                    </tr>
+                `;
                 return;
             }
 
             tbody.innerHTML = filtered.map(item => {
                 const available = item.totalStock - item.allocatedStock;
+                const availClass = available === 0 ? 'text-red-600 font-bold' : 'text-emerald-600 font-bold';
+                
                 return `
-                    <tr class="hover:bg-slate-50 transition-colors">
+                    <tr class="hover:bg-slate-50/80 transition-colors">
                         <td class="p-4 font-bold text-slate-800">${item.name}</td>
                         <td class="p-4 text-xs text-slate-600">${item.category}</td>
                         <td class="p-4 text-center font-bold text-slate-700">${item.totalStock} ${item.unit}</td>
                         <td class="p-4 text-center font-semibold text-amber-600">${item.allocatedStock} ${item.unit}</td>
-                        <td class="p-4 text-center font-bold text-emerald-600">${available} ${item.unit}</td>
+                        <td class="p-4 text-center ${availClass}">${available} ${item.unit}</td>
                         <td class="p-4 text-center">
                             <div class="flex items-center justify-center space-x-1.5">
-                                <button onclick="openEditComponentModal(${item.id})" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg text-xs"><i class="fa-solid fa-pen-to-square"></i></button>
-                                <button onclick="confirmDeleteComponent(${item.id})" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg text-xs"><i class="fa-solid fa-trash-can"></i></button>
+                                <button onclick="openEditComponentModal(${item.id})" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg text-xs font-medium transition-colors" title="Edit Item">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button onclick="confirmDeleteComponent(${item.id})" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg text-xs font-medium transition-colors" title="Delete Item">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -1225,7 +1821,9 @@
             }).join('');
         }
 
-        function filterInventoryTable() { renderInventoryTable(); }
+        function filterInventoryTable() {
+            renderInventoryTable();
+        }
 
         function openAddComponentModal() {
             document.getElementById('component-modal-title').innerText = 'Add Component Item';
@@ -1235,6 +1833,7 @@
             document.getElementById('comp-form-total').value = '10';
             document.getElementById('comp-form-unit').value = 'Pcs';
             document.getElementById('comp-form-notes').value = '';
+
             document.getElementById('modal-component-form').classList.remove('hidden');
         }
 
@@ -1249,11 +1848,13 @@
             document.getElementById('comp-form-total').value = item.totalStock;
             document.getElementById('comp-form-unit').value = item.unit;
             document.getElementById('comp-form-notes').value = item.notes || '';
+
             document.getElementById('modal-component-form').classList.remove('hidden');
         }
 
         async function handleComponentSubmit(e) {
             e.preventDefault();
+
             const editId = document.getElementById('comp-form-id').value;
             const name = document.getElementById('comp-form-name').value;
             const category = document.getElementById('comp-form-category').value;
@@ -1262,44 +1863,106 @@
             const notes = document.getElementById('comp-form-notes').value;
 
             if (editId) {
-                const { error } = await db.from('inventory').update({ name, category, total_stock: totalStock, unit, notes }).eq('id', editId);
+                const { error } = await supabase.from('inventory').update({
+                    name, category, total_stock: totalStock, unit, notes
+                }).eq('id', editId);
+
                 if (!error) {
-                    showToast(`Component updated!`);
+                    showToast(`Component "${name}" updated successfully!`);
+                    await fetchAllData();
                     closeModal('modal-component-form');
-                    await fetchAllDataFromSupabase();
-                } else { alert(error.message); }
+                } else {
+                    showToast("Failed to update inventory item");
+                }
             } else {
-                const { error } = await db.from('inventory').insert([{ name, category, total_stock: totalStock, allocated_stock: 0, unit, notes }]);
+                const { error } = await supabase.from('inventory').insert([{
+                    name, category, total_stock: totalStock, allocated_stock: 0, unit, notes
+                }]);
+
                 if (!error) {
-                    showToast(`New component added!`);
+                    showToast(`New component "${name}" added successfully!`);
+                    await fetchAllData();
                     closeModal('modal-component-form');
-                    await fetchAllDataFromSupabase();
-                } else { alert(error.message); }
+                } else {
+                    showToast("Failed to save component item");
+                }
             }
         }
 
         function confirmDeleteComponent(id) {
+            const item = inventoryData.find(i => i.id === id);
+            if (!item) return;
+
             itemToDeleteId = id;
-            document.getElementById('delete-item-name').innerText = id;
+            document.getElementById('delete-item-name').innerText = item.name;
             document.getElementById('btn-confirm-delete').onclick = executeDeleteComponent;
             document.getElementById('modal-delete-confirm').classList.remove('hidden');
         }
 
         async function executeDeleteComponent() {
             if (!itemToDeleteId) return;
-            const { error } = await db.from('inventory').delete().eq('id', itemToDeleteId);
+
+            const { error } = await supabase.from('inventory').delete().eq('id', itemToDeleteId);
             if (!error) {
-                showToast('Component deleted!');
+                itemToDeleteId = null;
+                showToast('Item removed from inventory!');
+                await fetchAllData();
                 closeModal('modal-delete-confirm');
-                await fetchAllDataFromSupabase();
+            } else {
+                showToast("Failed to delete component");
+            }
+        }
+
+        function switchTab(tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                btn.classList.remove('bg-roseGold-50', 'text-roseGold-600');
+                btn.classList.add('text-slate-600');
+            });
+
+            const activeContent = document.getElementById(`tab-${tabId}`);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+            }
+
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.add('bg-roseGold-50', 'text-roseGold-600');
+                activeNav.classList.remove('text-slate-600');
+            }
+
+            const pageTitle = document.getElementById('page-title');
+            switch (tabId) {
+                case 'dashboard':
+                    pageTitle.innerText = 'Dashboard Overview';
+                    renderDashboard();
+                    break;
+                case 'bookings':
+                    pageTitle.innerText = 'Customer Orders & Schedule';
+                    renderBookingsTable();
+                    break;
+                case 'packages':
+                    pageTitle.innerText = 'Decor Package Catalog & BOM';
+                    renderPackagesGrid();
+                    break;
+                case 'inventory':
+                    pageTitle.innerText = 'Warehouse Component Inventory';
+                    renderInventoryTable();
+                    break;
             }
         }
 
         function showToast(message) {
             const toast = document.getElementById('toast-notification');
-            document.getElementById('toast-message').innerText = message;
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = message;
+
             toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
             toast.classList.add('translate-y-0', 'opacity-100');
+
             setTimeout(() => {
                 toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
