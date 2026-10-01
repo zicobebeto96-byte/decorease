@@ -66,7 +66,81 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col md:flex-row">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col md:flex-row relative">
+
+    <!-- AUTH OVERLAY / MODAL (SIGN IN & SIGN UP WITHOUT EMAIL) -->
+    <div id="auth-overlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100">
+            <!-- Header Logo -->
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-roseGold-500 to-roseGold-300 flex items-center justify-center text-white shadow-lg shadow-roseGold-200 mx-auto mb-3">
+                    <i class="fa-solid font-bold fa-ring text-xl"></i>
+                </div>
+                <h2 class="font-serif-title font-bold text-2xl text-slate-900">DecorEase</h2>
+                <p class="text-xs text-roseGold-500 font-medium tracking-wide">WEDDING MANAGEMENT SYSTEM</p>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="flex bg-slate-100 p-1 rounded-xl mb-6 text-xs font-bold">
+                <button id="tab-btn-signin" onclick="switchAuthTab('signin')" class="flex-1 py-2.5 rounded-lg bg-white text-slate-800 shadow-sm transition-all">Sign In</button>
+                <button id="tab-btn-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2.5 rounded-lg text-slate-500 hover:text-slate-800 transition-all">Sign Up</button>
+            </div>
+
+            <!-- FORM SIGN IN -->
+            <form id="form-signin" onsubmit="handleSignIn(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Username *</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-user absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="signin-username" required placeholder="Enter your username" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 font-medium">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Password *</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="password" id="signin-password" required placeholder="Enter password" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 font-medium">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-roseGold-500 hover:bg-roseGold-600 text-white font-bold rounded-xl shadow-lg shadow-roseGold-200 transition-all text-xs mt-2">
+                    Sign In to Dashboard
+                </button>
+            </form>
+
+            <!-- FORM SIGN UP -->
+            <form id="form-signup" onsubmit="handleSignUp(event)" class="space-y-4 text-xs hidden">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Full Name *</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-id-card absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="signup-fullname" required placeholder="e.g. Siti Rahma" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 font-medium">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Username *</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-user absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="signup-username" required placeholder="Choose a username" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 font-medium">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Password *</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="password" id="signup-password" required placeholder="Create password" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400 font-medium">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-lg transition-all text-xs mt-2">
+                    Create New Account
+                </button>
+            </form>
+        </div>
+    </div>
 
     <!-- Sidebar / Mobile Header Navigation -->
     <aside class="w-full md:w-64 bg-white border-r border-slate-200 shrink-0 flex flex-col justify-between z-20 shadow-sm">
@@ -111,15 +185,15 @@
         <!-- User Profile Card in Sidebar -->
         <div class="p-4 border-t border-slate-100 m-2 bg-slate-50 rounded-xl flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-full bg-slate-300 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover">
+                <div class="w-9 h-9 rounded-full bg-roseGold-500 text-white font-bold flex items-center justify-center uppercase text-sm" id="user-avatar-initial">
+                    S
                 </div>
                 <div class="text-left">
-                    <p class="text-xs font-bold text-slate-800">Olga Victoria</p>
-                    <p class="text-[10px] text-slate-500">Owner</p>
+                    <p class="text-xs font-bold text-slate-800 truncate max-w-[100px]" id="user-display-fullname">User Name</p>
+                    <p class="text-[10px] text-slate-500 truncate max-w-[100px]" id="user-display-username">@username</p>
                 </div>
             </div>
-            <button class="text-slate-400 hover:text-slate-600 text-sm">
+            <button onclick="handleSignOut()" class="text-slate-400 hover:text-rose-600 text-sm p-1.5 transition-colors" title="Sign Out">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
         </div>
@@ -223,16 +297,13 @@
 
         <!-- TAB 2: BOOKINGS & CUSTOMER MANAGEMENT -->
         <div id="tab-bookings" class="tab-content hidden space-y-6">
-            <!-- Order Filter Area -->
             <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm text-xs">
                 <div class="flex flex-wrap items-center gap-3 flex-1">
-                    <!-- Search Field for Orders & Schedule -->
                     <div class="relative w-full sm:w-64">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                         <input type="text" id="order-search" oninput="filterBookingsTable()" placeholder="Search customer name, code, or venue..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                     </div>
 
-                    <!-- Status Filter Dropdown -->
                     <div class="flex items-center space-x-1.5">
                         <label class="font-bold text-slate-700 shrink-0">Status:</label>
                         <select id="filter-status" onchange="filterBookingsTable()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400 cursor-pointer">
@@ -245,13 +316,11 @@
                         </select>
                     </div>
 
-                    <!-- Begin Date Input -->
                     <div class="flex items-center space-x-1.5">
                         <label class="font-bold text-slate-700 shrink-0">Start Date:</label>
                         <input type="date" id="filter-begin-date" onchange="filterBookingsTable()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                     </div>
 
-                    <!-- End Date Input -->
                     <div class="flex items-center space-x-1.5">
                         <label class="font-bold text-slate-700 shrink-0">End Date:</label>
                         <input type="date" id="filter-end-date" onchange="filterBookingsTable()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-roseGold-400">
@@ -266,7 +335,6 @@
                 </div>
             </div>
 
-            <!-- Order Data Table -->
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -281,7 +349,7 @@
                             </tr>
                         </thead>
                         <tbody id="bookings-tbody" class="divide-y divide-slate-100 text-sm">
-                            <!-- Dynamic Content Rendered via JS -->
+                            <!-- Dynamic Content -->
                         </tbody>
                     </table>
                 </div>
@@ -300,9 +368,8 @@
                 </button>
             </div>
 
-            <!-- Dynamic Package Cards Grid Container -->
             <div id="packages-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Package Cards Rendered Dinamis via JS -->
+                <!-- Package Cards -->
             </div>
         </div>
 
@@ -314,7 +381,6 @@
                     <p class="text-xs text-slate-500">Manage master items and physical stock.</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <!-- BUTTON CATEGORY MODIFIED -->
                     <button onclick="openCategoryManagerModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center space-x-1.5 border border-slate-200">
                         <i class="fa-solid fa-folder text-xs text-roseGold-500"></i>
                         <span>Category</span>
@@ -351,7 +417,7 @@
                             </tr>
                         </thead>
                         <tbody id="inventory-tbody" class="divide-y divide-slate-100">
-                            <!-- Dynamic Content Rendered via JS -->
+                            <!-- Dynamic Content -->
                         </tbody>
                     </table>
                 </div>
@@ -360,7 +426,7 @@
 
     </main>
 
-    <!-- MODAL: CATEGORY MANAGER (LIST, EDIT, DELETE, & ADD CATEGORY) -->
+    <!-- MODAL CATEGORY MANAGER -->
     <div id="modal-category-manager" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[85vh]">
             <div class="p-5 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
@@ -374,7 +440,6 @@
             </div>
 
             <div class="p-5 space-y-4 text-xs overflow-y-auto">
-                <!-- FORM ADD CATEGORY INLINE -->
                 <form onsubmit="handleCategoryAdd(event)" class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
                     <label class="block font-bold text-slate-700">Add New Category</label>
                     <div class="flex gap-2">
@@ -386,11 +451,10 @@
                     </div>
                 </form>
 
-                <!-- LIST CATEGORIES -->
                 <div>
                     <label class="block font-bold text-slate-700 mb-2">Existing Categories (<span id="category-list-count">0</span>)</label>
                     <div id="category-list-container" class="space-y-2 divide-y divide-slate-100 border border-slate-200 rounded-xl p-2 bg-white">
-                        <!-- Dynamic List Rendered via JS -->
+                        <!-- Dynamic List -->
                     </div>
                 </div>
             </div>
@@ -403,7 +467,7 @@
         </div>
     </div>
 
-    <!-- MODAL: VIEW ORDER DETAILS (READ ONLY) -->
+    <!-- MODAL DETAIL -->
     <div id="modal-detail" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100">
             <div class="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
@@ -417,7 +481,6 @@
             </div>
 
             <div class="p-6 space-y-6">
-                <!-- Main Booking Info -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4 bg-slate-50 rounded-xl text-xs">
                     <div>
                         <span class="text-slate-400 block">Booking Code:</span>
@@ -441,7 +504,6 @@
                     </div>
                 </div>
 
-                <!-- Financial Section -->
                 <div class="grid grid-cols-3 gap-3 p-4 bg-roseGold-50/50 rounded-xl border border-roseGold-100 text-xs">
                     <div>
                         <span class="text-slate-500 block">Package Price / Total:</span>
@@ -457,7 +519,6 @@
                     </div>
                 </div>
 
-                <!-- Main Components Section -->
                 <div>
                     <div class="flex justify-between items-center mb-3">
                         <h4 class="font-bold text-slate-800 text-sm">Main Decor Components</h4>
@@ -474,13 +535,12 @@
                                 </tr>
                             </thead>
                             <tbody id="modal-components-tbody" class="divide-y divide-slate-100">
-                                <!-- Dynamic Component List Rendered via JS -->
+                                <!-- Dynamic Content -->
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Additional Section (View Only) -->
                 <div>
                     <div class="flex justify-between items-center mb-3">
                         <h4 class="font-bold text-slate-800 text-sm">Additionals (Consumable)</h4>
@@ -497,13 +557,12 @@
                                 </tr>
                             </thead>
                             <tbody id="modal-additional-tbody" class="divide-y divide-slate-100">
-                                <!-- Dynamic Additional Rows -->
+                                <!-- Dynamic Content -->
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Transport Section (View Only) -->
                 <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs flex justify-between items-center">
                     <span class="font-bold text-slate-700"><i class="fa-solid fa-truck text-roseGold-500 mr-2"></i>Delivery Fleet / Transport:</span>
                     <span id="modal-transport-val" class="font-bold text-slate-900 text-xs">Not Specified</span>
@@ -518,7 +577,7 @@
         </div>
     </div>
 
-    <!-- MODAL: ADD / EDIT BOOKING FORM -->
+    <!-- MODAL BOOKING FORM -->
     <div id="modal-booking" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100">
             <div class="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
@@ -553,7 +612,7 @@
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Select Base Decor Package *</label>
                         <select id="new-book-package" onchange="onBookingPackageChange()" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
-                            <!-- Populated dynamically via JS -->
+                            <!-- Options -->
                         </select>
                     </div>
                 </div>
@@ -563,7 +622,6 @@
                     <input type="text" id="new-book-venue" placeholder="e.g. Hotel Ritz Carlton, Grand Ballroom" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                 </div>
 
-                <!-- FINANCIAL SECTION -->
                 <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
                     <span class="block font-bold text-slate-800 text-[11px] uppercase tracking-wider text-roseGold-600"><i class="fa-solid fa-calculator mr-1"></i> Payment & Billing Information</span>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -582,7 +640,6 @@
                     </div>
                 </div>
 
-                <!-- EDITABLE DECOR COMPONENTS SECTION -->
                 <div id="booking-components-section" class="pt-2 border-t border-slate-100">
                     <div class="flex items-center justify-between mb-2">
                         <div>
@@ -595,11 +652,10 @@
                     </div>
 
                     <div id="booking-components-container" class="space-y-2">
-                        <!-- Dynamic Editable Component Rows -->
+                        <!-- Component Rows -->
                     </div>
                 </div>
 
-                <!-- ADDITIONAL SECTION -->
                 <div class="pt-2 border-t border-slate-100">
                     <div class="flex justify-between items-center mb-2">
                         <div>
@@ -612,17 +668,15 @@
                     </div>
 
                     <div id="additional-rows-container" class="space-y-2">
-                        <!-- Dynamic Additional Row Container -->
+                        <!-- Additional Rows -->
                     </div>
                 </div>
 
-                <!-- TRANSPORT FIELD -->
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Transport / Delivery Fleet</label>
                     <input type="text" id="new-book-transport" placeholder="e.g. Grand Max Pickup / Engkel Box Truck" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-roseGold-400">
                 </div>
 
-                <!-- Order Status Dropdown -->
                 <div id="booking-status-field-container">
                     <label class="block font-bold text-slate-700 mb-1">Order Status *</label>
                     <select id="new-book-status" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-roseGold-400 cursor-pointer">
@@ -646,7 +700,7 @@
         </div>
     </div>
 
-    <!-- MODAL: CONFIRM DELETE BOOKING -->
+    <!-- MODAL CONFIRM DELETE BOOKING -->
     <div id="modal-delete-booking-confirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-100">
             <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl">
@@ -667,7 +721,7 @@
         </div>
     </div>
 
-    <!-- MODAL: CREATE NEW PACKAGE -->
+    <!-- MODAL CREATE NEW PACKAGE -->
     <div id="modal-package-form" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100">
             <div class="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
@@ -727,7 +781,7 @@
         </div>
     </div>
 
-    <!-- MODAL: EDIT / VIEW DECOR PACKAGE -->
+    <!-- MODAL EDIT PACKAGE -->
     <div id="modal-edit-package-bom" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100">
             <div class="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
@@ -791,7 +845,7 @@
         </div>
     </div>
 
-    <!-- MODAL: CONFIRM DELETE PACKAGE -->
+    <!-- MODAL CONFIRM DELETE PACKAGE -->
     <div id="modal-delete-pkg-confirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-100">
             <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl">
@@ -812,7 +866,7 @@
         </div>
     </div>
 
-    <!-- MODAL: ADD / EDIT COMPONENT FORM -->
+    <!-- MODAL ADD/EDIT COMPONENT FORM -->
     <div id="modal-component-form" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100">
             <div class="p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
@@ -868,7 +922,7 @@
         </div>
     </div>
 
-    <!-- MODAL: CONFIRM DELETE STOCK -->
+    <!-- MODAL CONFIRM DELETE STOCK -->
     <div id="modal-delete-confirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-100">
             <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto text-xl">
@@ -920,10 +974,113 @@
         };
 
         window.onload = async function() {
+            checkAuthSession();
             await fetchAllData();
             populatePackageOptions();
             updateCategoryDropdowns();
         };
+
+        // AUTHENTICATION LOGIC (SUPABASE DIRECT)
+        function checkAuthSession() {
+            const currentUser = JSON.parse(localStorage.getItem('decorease_user'));
+            const authOverlay = document.getElementById('auth-overlay');
+
+            if (currentUser) {
+                authOverlay.classList.add('hidden');
+                document.getElementById('user-display-fullname').innerText = currentUser.fullname;
+                document.getElementById('user-display-username').innerText = `@${currentUser.username}`;
+                document.getElementById('user-avatar-initial').innerText = currentUser.fullname.charAt(0).toUpperCase();
+            } else {
+                authOverlay.classList.remove('hidden');
+            }
+        }
+
+        function switchAuthTab(type) {
+            const btnSignin = document.getElementById('tab-btn-signin');
+            const btnSignup = document.getElementById('tab-btn-signup');
+            const formSignin = document.getElementById('form-signin');
+            const formSignup = document.getElementById('form-signup');
+
+            if (type === 'signin') {
+                btnSignin.className = "flex-1 py-2.5 rounded-lg bg-white text-slate-800 shadow-sm transition-all";
+                btnSignup.className = "flex-1 py-2.5 rounded-lg text-slate-500 hover:text-slate-800 transition-all";
+                formSignin.classList.remove('hidden');
+                formSignup.classList.add('hidden');
+            } else {
+                btnSignup.className = "flex-1 py-2.5 rounded-lg bg-white text-slate-800 shadow-sm transition-all";
+                btnSignin.className = "flex-1 py-2.5 rounded-lg text-slate-500 hover:text-slate-800 transition-all";
+                formSignup.classList.remove('hidden');
+                formSignin.classList.add('hidden');
+            }
+        }
+
+        async function handleSignIn(e) {
+            e.preventDefault();
+            const username = document.getElementById('signin-username').value.trim();
+            const password = document.getElementById('signin-password').value;
+
+            // Fetch user from Supabase 'users' table
+            const { data, error } = await supabaseClient
+                .from('users')
+                .select('*')
+                .eq('username', username)
+                .eq('password', password)
+                .single();
+
+            if (data) {
+                localStorage.setItem('decorease_user', JSON.stringify({
+                    fullname: data.fullname,
+                    username: data.username
+                }));
+                showToast(`Welcome back, ${data.fullname}!`);
+                checkAuthSession();
+            } else {
+                showToast("Invalid username or password!");
+            }
+        }
+
+        async function handleSignUp(e) {
+            e.preventDefault();
+            const fullname = document.getElementById('signup-fullname').value.trim();
+            const username = document.getElementById('signup-username').value.trim();
+            const password = document.getElementById('signup-password').value;
+
+            if (!fullname || !username || !password) {
+                showToast("Please fill out all fields!");
+                return;
+            }
+
+            // Check if username already exists in Supabase
+            const { data: existingUser } = await supabaseClient
+                .from('users')
+                .select('username')
+                .eq('username', username)
+                .maybeSingle();
+
+            if (existingUser) {
+                showToast("Username already taken! Choose another.");
+                return;
+            }
+
+            // Insert new user into Supabase
+            const { error } = await supabaseClient
+                .from('users')
+                .insert([{ fullname, username, password }]);
+
+            if (!error) {
+                localStorage.setItem('decorease_user', JSON.stringify({ fullname, username }));
+                showToast("Account created successfully!");
+                checkAuthSession();
+            } else {
+                showToast("Failed to register user to Supabase");
+            }
+        }
+
+        function handleSignOut() {
+            localStorage.removeItem('decorease_user');
+            showToast("Logged out successfully");
+            checkAuthSession();
+        }
 
         async function fetchAllData() {
             try {
@@ -1031,7 +1188,6 @@
                     </div>
 
                     <div class="flex items-center space-x-1 shrink-0">
-                        <!-- Default View Actions -->
                         <button type="button" id="btn-edit-cat-${idx}" onclick="toggleEditCategoryRow(${idx}, true)" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded text-xs transition-colors" title="Edit Category">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
@@ -1039,7 +1195,6 @@
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
 
-                        <!-- Edit View Actions -->
                         <button type="button" id="btn-save-cat-${idx}" onclick="saveEditedCategory(${idx})" class="hidden px-2.5 py-1 bg-emerald-500 hover:bg-emerald-600 text-white rounded font-semibold text-[11px] shadow-sm">
                             Save
                         </button>
@@ -1090,10 +1245,8 @@
                 return;
             }
 
-            // Update local array
             customCategories[idx] = newCatName;
 
-            // Update inventory items with old category name in database
             const { error } = await supabaseClient
                 .from('inventory')
                 .update({ category: newCatName })
@@ -1111,14 +1264,12 @@
         async function deleteCategory(idx) {
             const catToDelete = customCategories[idx];
             
-            // Check if any inventory items rely on this category
             const countItems = inventoryData.filter(i => i.category === catToDelete).length;
             if (countItems > 0) {
                 if (!confirm(`Category "${catToDelete}" has ${countItems} item(s) assigned to it. Deleting this category will clear the category for those items. Continue?`)) {
                     return;
                 }
 
-                // Clear category in database
                 await supabaseClient
                     .from('inventory')
                     .update({ category: 'Uncategorized' })
